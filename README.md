@@ -1,5 +1,5 @@
 # Oqtane Survey Module
-An [Oqtane](https://github.com/oqtane/oqtane.framework) module that allows developers to create user surveys.
+An [Oqtane](https://github.com/oqtane/oqtane.framework) module that allows administrators to create user surveys.
 
 ## Planned Features
 
