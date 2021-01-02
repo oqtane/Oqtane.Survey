@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <Version>1.0.0</Version>
+    <Product>Oqtane.Survey</Product>
+    <Authors>Oqtane</Authors>
+    <Company>Oqtane</Company>
+    <Description>Oqtane.Survey</Description>
+    <Copyright>Oqtane</Copyright>
+    <AssemblyName>Oqtane.Survey.Server.Oqtane</AssemblyName>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\Oqtane.Survey.1.0.0.sql" />
+    <EmbeddedResource Include="Scripts\Oqtane.Survey.Uninstall.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Oqtane.Survey.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Oqtane.Server" Version="2.0.0" />
+    <PackageReference Include="Oqtane.Shared" Version="2.0.0" />
+  </ItemGroup>
+</Project>

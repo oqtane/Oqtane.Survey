@@ -1,0 +1,110 @@
+@using Oqtane.Survey.Services
+@using Oqtane.Survey.Models
+
+@namespace Oqtane.Survey
+@inherits ModuleBase
+@inject ISurveyService SurveyService
+@inject NavigationManager NavigationManager
+
+@if (_Surveys == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ActionLink Action="Add" Security="SecurityAccessLevel.Edit" Text="Add Survey" />
+    <br />
+    <br />
+    @if (@_Surveys.Count != 0)
+    {
+        <Pager Items="@_Surveys">
+            <Header>
+                <th style="width: 1px;">&nbsp;</th>
+                <th style="width: 1px;">&nbsp;</th>
+                <th>Name</th>
+            </Header>
+            <Row>
+                <td><ActionLink Action="Edit" Parameters="@($"id=" + context.SurveyId.ToString())" /></td>
+                <td><ActionDialog Header="Delete Survey" Message="@("Are You Sure You Wish To Delete The " + context.Name + " Survey?")" Action="Delete" Security="SecurityAccessLevel.Edit" Class="btn btn-danger" OnClick="@(async () => await Delete(context))" /></td>
+                <td>@context.Name</td>
+            </Row>
+        </Pager>
+    }
+    else
+    {
+        <p>No Surveys To Display</p>
+    }
+}
+
+<!-- The content below is for informational purposes only and can be safely removed -->
+
+<hr />
+Survey Module Created Successfully. Use Edit Mode To Add A Survey. You Can Access The Files At The Following Locations:<br /><br />
+C:\Users\Michael\Source\Repos\ADefWebserver\Oqtane.Survey\Client\<br />
+- Oqtane.Survey.Client.csproj - client project<br />
+- _Imports.razor - global imports for module components<br />
+- Edit.razor - component for adding or editing content<br />
+- Index.razor - main component for your module **the content you are reading is in this file**<br />
+- ModuleInfo.cs - implements IModule interface to provide configuration settings for your module<br />
+- Settings.razor - component for managing module settings<br />
+- Services\ISurveyService.cs - interface for defining service API methods<br />
+- Services\SurveyService.cs - implements service API interface methods<br /><br />
+C:\Users\Michael\Source\Repos\ADefWebserver\Oqtane.Survey\Package\<br />
+- Oqtane.Survey.nuspec - nuget manifest for packaging module<br />
+- Oqtane.Survey.Package.csproj - packaging project<br />
+- debug.cmd - copies assemblies to Oqtane bin folder when in Debug mode<br />
+- release.cmd - creates nuget package and deploys to Oqtane wwwroot/modules folder when in Release mode<br /><br />
+C:\Users\Michael\Source\Repos\ADefWebserver\Oqtane.Survey\Server\<br />
+- Oqtane.Survey.Server.csproj - server project<br />
+- Controllers\SurveyController.cs - API methods implemented using a REST pattern<br />
+- Manager\SurveyManager.cs - implements optional module interfaces for features such as import/export of content<br />
+- Repository\ISurveyRepository.cs - interface for defining repository methods<br />
+- Repository\SurveyRespository.cs - implements repository interface methods for data access using EF Core<br />
+- Repository\SurveyContext.cs - provides a DB Context for data access<br />
+- Scripts\Oqtane.Survey.1.0.0.sql - database schema definition script<br />
+- Scripts\Oqtane.Survey.Uninstall.sql - database uninstall script<br />
+- wwwroot\Module.css - module style sheet<br /><br />
+C:\Users\Michael\Source\Repos\ADefWebserver\Oqtane.Survey\Shared\<br />
+- Oqtane.Survey.csproj - shared project<br />
+- Models\Survey.cs - model definition<br /><br />
+
+<!-- The content above is for informational purposes only and can be safely removed -->
+
+@code {
+    public override List<Resource> Resources => new List<Resource>()
+    {
+        new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" },
+        new Resource { ResourceType = ResourceType.Script, Url = ModulePath() + "Module.js" }
+    };
+
+    List<Survey> _Surveys;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _Surveys = await SurveyService.GetSurveysAsync(ModuleState.ModuleId);
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Loading Survey {Error}", ex.Message);
+            AddModuleMessage("Error Loading Survey", MessageType.Error);
+        }
+    }
+
+    private async Task Delete(Survey Survey)
+    {
+        try
+        {
+            await SurveyService.DeleteSurveyAsync(Survey.SurveyId, ModuleState.ModuleId);
+            await logger.LogInformation("Survey Deleted {Survey}", Survey);
+            _Surveys = await SurveyService.GetSurveysAsync(ModuleState.ModuleId);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Deleting Survey {Survey} {Error}", Survey, ex.Message);
+            AddModuleMessage("Error Deleting Survey", MessageType.Error);
+        }
+    }
+}

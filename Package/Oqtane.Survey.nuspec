@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Oqtane.Survey</id>
+    <version>1.0.0</version>
+    <authors>Oqtane</authors>
+    <owners>Oqtane</owners>
+    <title>Survey</title>
+    <description>Survey</description>
+    <copyright>Oqtane</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/oqtane/oqtane.framework</projectUrl>
+    <iconUrl>https://www.oqtane.org/Portals/0/icon.jpg</iconUrl>
+    <tags>oqtane module</tags>
+    <releaseNotes></releaseNotes>
+    <summary></summary>
+    <dependencies>
+      <dependency id="Oqtane.Framework" version="2.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Client\bin\Release\net5.0\Oqtane.Survey.Client.Oqtane.dll" target="lib\net5.0" /> 
+    <file src="..\Client\bin\Release\net5.0\Oqtane.Survey.Client.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Server\bin\Release\net5.0\Oqtane.Survey.Server.Oqtane.dll" target="lib\net5.0" /> 
+    <file src="..\Server\bin\Release\net5.0\Oqtane.Survey.Server.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Shared\bin\Release\net5.0\Oqtane.Survey.Shared.Oqtane.dll" target="lib\net5.0" /> 
+    <file src="..\Shared\bin\Release\net5.0\Oqtane.Survey.Shared.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Server\wwwroot\**\*.*" target="wwwroot" /> 
+  </files>
+</package>
