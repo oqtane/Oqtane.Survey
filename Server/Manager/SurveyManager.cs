@@ -53,7 +53,7 @@ namespace Oqtane.Survey.Manager
             {
                 foreach(var Survey in Surveys)
                 {
-                    _SurveyRepository.AddSurvey(new Models.Survey { ModuleId = module.ModuleId, Name = Survey.Name });
+                    _SurveyRepository.AddSurvey(new Models.Survey { ModuleId = module.ModuleId, SurveyName = Survey.SurveyName });
                 }
             }
         }

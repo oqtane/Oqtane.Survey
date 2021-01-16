@@ -13,8 +13,10 @@ CREATE TABLE [dbo].[OqtaneSurvey](
 	[UserId] [int] NOT NULL,
 	[ModuleId] [int] NOT NULL,
 	[SurveyName] [nvarchar](256) NOT NULL,
-	[DateCreated] [datetime] NOT NULL,
-	[DateUpdated] [datetime] NOT NULL,
+	[CreatedBy] [nvarchar](256) NOT NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[ModifiedBy] [nvarchar](256) NOT NULL,
+	[ModifiedOn] [datetime] NOT NULL,
  CONSTRAINT [PK_OqtaneSurvey] PRIMARY KEY CLUSTERED 
 (
 	[SurveyId] ASC

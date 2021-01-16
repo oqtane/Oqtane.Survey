@@ -25,8 +25,8 @@ else
             </Header>
             <Row>
                 <td><ActionLink Action="Edit" Parameters="@($"id=" + context.SurveyId.ToString())" /></td>
-                <td><ActionDialog Header="Delete Survey" Message="@("Are You Sure You Wish To Delete The " + context.Name + " Survey?")" Action="Delete" Security="SecurityAccessLevel.Edit" Class="btn btn-danger" OnClick="@(async () => await Delete(context))" /></td>
-                <td>@context.Name</td>
+                <td><ActionDialog Header="Delete Survey" Message="@("Are You Sure You Wish To Delete The " + context.SurveyName + " Survey?")" Action="Delete" Security="SecurityAccessLevel.Edit" Class="btn btn-danger" OnClick="@(async () => await Delete(context))" /></td>
+                <td>@context.SurveyName</td>
             </Row>
         </Pager>
     }

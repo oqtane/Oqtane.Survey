@@ -23,7 +23,7 @@ namespace Oqtane.Survey.Services
         public async Task<List<Models.Survey>> GetSurveysAsync(int ModuleId)
         {
             List<Models.Survey> Surveys = await GetJsonAsync<List<Models.Survey>>(CreateAuthorizationPolicyUrl($"{Apiurl}?moduleid={ModuleId}", ModuleId));
-            return Surveys.OrderBy(item => item.Name).ToList();
+            return Surveys.OrderBy(item => item.SurveyName).ToList();
         }
 
         public async Task<Models.Survey> GetSurveyAsync(int SurveyId, int ModuleId)

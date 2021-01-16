@@ -10,10 +10,10 @@
 <table class="table table-borderless">
     <tr>
         <td>
-            <Label For="name" HelpText="Enter a name">Name: </Label>
+            <Label For="surveyname" HelpText="Enter a name">Survey Name: </Label>
         </td>
         <td>
-            <input id="name" class="form-control" @bind="@_name" />
+            <input id="surveyname" class="form-control" @bind="@_surveyname" />
         </td>
     </tr>
 </table>
@@ -39,7 +39,7 @@
     };
 
     int _id;
-    string _name;
+    string _surveyname;
     string _createdby;
     DateTime _createdon;
     string _modifiedby;
@@ -55,7 +55,7 @@
                 Survey Survey = await SurveyService.GetSurveyAsync(_id, ModuleState.ModuleId);
                 if (Survey != null)
                 {
-                    _name = Survey.Name;
+                    _surveyname = Survey.SurveyName;
                     _createdby = Survey.CreatedBy;
                     _createdon = Survey.CreatedOn;
                     _modifiedby = Survey.ModifiedBy;
@@ -78,14 +78,14 @@
             {
                 Survey Survey = new Survey();
                 Survey.ModuleId = ModuleState.ModuleId;
-                Survey.Name = _name;
+                Survey.SurveyName = _surveyname;
                 Survey = await SurveyService.AddSurveyAsync(Survey);
                 await logger.LogInformation("Survey Added {Survey}", Survey);
             }
             else
             {
                 Survey Survey = await SurveyService.GetSurveyAsync(_id, ModuleState.ModuleId);
-                Survey.Name = _name;
+                Survey.SurveyName = _surveyname;
                 await SurveyService.UpdateSurveyAsync(Survey);
                 await logger.LogInformation("Survey Updated {Survey}", Survey);
             }

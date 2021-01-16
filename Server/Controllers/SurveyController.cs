@@ -7,6 +7,7 @@ using Oqtane.Enums;
 using Oqtane.Infrastructure;
 using Oqtane.Survey.Models;
 using Oqtane.Survey.Repository;
+using Oqtane.Repository;
 
 namespace Oqtane.Survey.Controllers
 {
@@ -14,12 +15,14 @@ namespace Oqtane.Survey.Controllers
     public class SurveyController : Controller
     {
         private readonly ISurveyRepository _SurveyRepository;
+        private readonly IUserRepository _users;
         private readonly ILogManager _logger;
         protected int _entityId = -1;
 
-        public SurveyController(ISurveyRepository SurveyRepository, ILogManager logger, IHttpContextAccessor accessor)
+        public SurveyController(ISurveyRepository SurveyRepository, IUserRepository users, ILogManager logger, IHttpContextAccessor accessor)
         {
             _SurveyRepository = SurveyRepository;
+            _users = users;
             _logger = logger;
 
             if (accessor.HttpContext.Request.Query.ContainsKey("entityid"))
@@ -56,6 +59,12 @@ namespace Oqtane.Survey.Controllers
         {
             if (ModelState.IsValid && Survey.ModuleId == _entityId)
             {
+                // Get User
+                var User = _users.GetUser(this.User.Identity.Name);
+
+                // Add User to Survey object
+                Survey.UserId = User.UserId;
+
                 Survey = _SurveyRepository.AddSurvey(Survey);
                 _logger.Log(LogLevel.Information, this, LogFunction.Create, "Survey Added {Survey}", Survey);
             }
