@@ -34,11 +34,11 @@ namespace Oqtane.Survey.Manager
         public string ExportModule(Module module)
         {
             string content = "";
-            List<Models.Survey> Surveys = _SurveyRepository.GetSurveys(module.ModuleId).ToList();
-            if (Surveys != null)
-            {
-                content = JsonSerializer.Serialize(Surveys);
-            }
+            // FIX List<Models.Survey> Surveys = _SurveyRepository.GetSurveys(module.ModuleId).ToList();
+            //if (Surveys != null)
+            //{
+            //    content = JsonSerializer.Serialize(Surveys);
+            //}
             return content;
         }
 
@@ -53,7 +53,7 @@ namespace Oqtane.Survey.Manager
             {
                 foreach(var Survey in Surveys)
                 {
-                    _SurveyRepository.AddSurvey(new Models.Survey { ModuleId = module.ModuleId, SurveyName = Survey.SurveyName });
+                    // FIX _SurveyRepository.AddSurvey(new Models.Survey { ModuleId = module.ModuleId, SurveyName = Survey.SurveyName });
                 }
             }
         }

@@ -46,4 +46,8 @@
     <Content Remove="wwwroot\_content\**\*.*" />
     <None Include="wwwroot\_content\**\*.*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="efpt.config.json" />
+  </ItemGroup>
 </Project>

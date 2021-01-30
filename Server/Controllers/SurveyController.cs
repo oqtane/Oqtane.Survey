@@ -36,7 +36,8 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.ViewModule)]
         public IEnumerable<Models.Survey> Get(string moduleid)
         {
-            return _SurveyRepository.GetSurveys(int.Parse(moduleid));
+            // FIX return _SurveyRepository.GetSurveys(int.Parse(moduleid));
+            return new List<Models.Survey>();
         }
 
         // GET api/<controller>/5
@@ -44,12 +45,13 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.ViewModule)]
         public Models.Survey Get(int id)
         {
-            Models.Survey Survey = _SurveyRepository.GetSurvey(id);
-            if (Survey != null && Survey.ModuleId != _entityId)
-            {
-                Survey = null;
-            }
-            return Survey;
+            // FIX Models.Survey Survey = _SurveyRepository.GetSurvey(id);
+            //if (Survey != null && Survey.ModuleId != _entityId)
+            //{
+            //    Survey = null;
+            //}
+            //return Survey;
+            return new Models.Survey();
         }
 
         // POST api/<controller>
@@ -65,7 +67,7 @@ namespace Oqtane.Survey.Controllers
                 // Add User to Survey object
                 Survey.UserId = User.UserId;
 
-                Survey = _SurveyRepository.AddSurvey(Survey);
+                // FIX Survey = _SurveyRepository.AddSurvey(Survey);
                 _logger.Log(LogLevel.Information, this, LogFunction.Create, "Survey Added {Survey}", Survey);
             }
             return Survey;
@@ -76,11 +78,11 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public Models.Survey Put(int id, [FromBody] Models.Survey Survey)
         {
-            if (ModelState.IsValid && Survey.ModuleId == _entityId)
-            {
-                Survey = _SurveyRepository.UpdateSurvey(Survey);
-                _logger.Log(LogLevel.Information, this, LogFunction.Update, "Survey Updated {Survey}", Survey);
-            }
+            // FIX if (ModelState.IsValid && Survey.ModuleId == _entityId)
+            //{
+            //    Survey = _SurveyRepository.UpdateSurvey(Survey);
+            //    _logger.Log(LogLevel.Information, this, LogFunction.Update, "Survey Updated {Survey}", Survey);
+            //}
             return Survey;
         }
 
@@ -89,12 +91,12 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public void Delete(int id)
         {
-            Models.Survey Survey = _SurveyRepository.GetSurvey(id);
-            if (Survey != null && Survey.ModuleId == _entityId)
-            {
-                _SurveyRepository.DeleteSurvey(id);
-                _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Survey Deleted {SurveyId}", id);
-            }
+            // FIX Models.Survey Survey = _SurveyRepository.GetSurvey(id);
+            //if (Survey != null && Survey.ModuleId == _entityId)
+            //{
+            //    _SurveyRepository.DeleteSurvey(id);
+            //    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Survey Deleted {SurveyId}", id);
+            //}
         }
     }
 }

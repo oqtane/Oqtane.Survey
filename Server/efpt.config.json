@@ -1,0 +1,44 @@
+﻿{
+  "ContextClassName": "SurveyContext",
+  "ContextNamespace": null,
+  "DefaultDacpacSchema": null,
+  "FilterSchemas": false,
+  "IncludeConnectionString": false,
+  "ModelNamespace": null,
+  "OutputContextPath": null,
+  "OutputPath": "Repository",
+  "ProjectRootNamespace": "Oqtane.Survey.Server",
+  "Schemas": null,
+  "SelectedHandlebarsLanguage": 0,
+  "SelectedToBeGenerated": 0,
+  "Tables": [
+    {
+      "HasPrimaryKey": true,
+      "Name": "[dbo].[OqtaneSurvey]",
+      "ObjectType": 0
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[dbo].[OqtaneSurveyAnswer]",
+      "ObjectType": 0
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[dbo].[OqtaneSurveyItem]",
+      "ObjectType": 0
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[dbo].[OqtaneSurveyItemOption]",
+      "ObjectType": 0
+    }
+  ],
+  "UseDatabaseNames": false,
+  "UseDbContextSplitting": false,
+  "UseFluentApiOnly": true,
+  "UseHandleBars": false,
+  "UseInflector": false,
+  "UseLegacyPluralizer": false,
+  "UseNodaTime": false,
+  "UseSpatial": false
+}
