@@ -7,6 +7,7 @@ using Oqtane.Infrastructure;
 using Oqtane.Repository;
 using Oqtane.Survey.Models;
 using Oqtane.Survey.Repository;
+using Oqtane.Survey.Server.Repository;
 
 namespace Oqtane.Survey.Manager
 {
@@ -34,26 +35,31 @@ namespace Oqtane.Survey.Manager
         public string ExportModule(Module module)
         {
             string content = "";
-            // FIX List<Models.Survey> Surveys = _SurveyRepository.GetSurveys(module.ModuleId).ToList();
-            //if (Surveys != null)
-            //{
-            //    content = JsonSerializer.Serialize(Surveys);
-            //}
+            List<OqtaneSurvey> Surveys = _SurveyRepository.GetAllSurveysByModule(module.ModuleId).ToList();
+            if (Surveys != null)
+            {
+                content = JsonSerializer.Serialize(Surveys);
+            }
             return content;
         }
 
         public void ImportModule(Module module, string content, string version)
         {
-            List<Models.Survey> Surveys = null;
+            List<OqtaneSurvey> Surveys = null;
             if (!string.IsNullOrEmpty(content))
             {
-                Surveys = JsonSerializer.Deserialize<List<Models.Survey>>(content);
+                Surveys = JsonSerializer.Deserialize<List<OqtaneSurvey>>(content);
             }
             if (Surveys != null)
             {
                 foreach(var Survey in Surveys)
                 {
-                    // FIX _SurveyRepository.AddSurvey(new Models.Survey { ModuleId = module.ModuleId, SurveyName = Survey.SurveyName });
+                    _SurveyRepository.CreateSurveyAsync(
+                        new OqtaneSurvey { 
+                            ModuleId = module.ModuleId, 
+                            SurveyName = Survey.SurveyName,
+                            UserId = Survey.UserId
+                        });
                 }
             }
         }

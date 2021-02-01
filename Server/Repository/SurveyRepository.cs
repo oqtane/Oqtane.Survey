@@ -32,6 +32,19 @@ namespace Oqtane.Survey.Repository
         }
         #endregion
 
+        #region public List<OqtaneSurvey> GetAllSurveysByModule(int ModuleId)
+        public List<OqtaneSurvey> GetAllSurveysByModule(int ModuleId)
+        {
+            return _db.OqtaneSurvey
+                .Where(x => x.ModuleId == ModuleId)
+                .Include(x => x.OqtaneSurveyItem)
+                .ThenInclude(x => x.OqtaneSurveyItemOption)
+                .AsNoTracking()
+                .OrderBy(x => x.SurveyName)
+                .ToList();
+        }
+        #endregion
+
         #region public Task<OqtaneSurvey> GetSurvey(int Id)
         public Task<OqtaneSurvey> GetSurvey(int Id)
         {
@@ -51,6 +64,7 @@ namespace Oqtane.Survey.Repository
                 OqtaneSurvey objSurvey = new OqtaneSurvey();
 
                 objSurvey.SurveyId = 0;
+                objSurvey.ModuleId = NewSurvey.ModuleId;
                 objSurvey.SurveyName = NewSurvey.SurveyName;
                 objSurvey.UserId = NewSurvey.UserId;
                 objSurvey.CreatedOn = DateTime.Now;
