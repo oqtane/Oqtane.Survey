@@ -251,8 +251,8 @@ namespace Oqtane.Survey.Repository
 
         // Survey Answers
 
-        #region public Task<bool> CreateSurveyAnswersAsync(DTOSurvey paramDTOSurvey)
-        public Task<bool> CreateSurveyAnswersAsync(DTOSurvey paramDTOSurvey)
+        #region public Task<bool> CreateSurveyAnswersAsync(Survey paramDTOSurvey)
+        public Task<bool> CreateSurveyAnswersAsync(Models.Survey paramDTOSurvey)
         {
             try
             {

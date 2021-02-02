@@ -36,7 +36,7 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.ViewModule)]
         public IEnumerable<Models.Survey> Get(string moduleid)
         {
-            // FIX return _SurveyRepository.GetSurveys(int.Parse(moduleid));
+            //FIX return _SurveyRepository.GetAllSurveysByModule(int.Parse(moduleid));
             return new List<Models.Survey>();
         }
 
