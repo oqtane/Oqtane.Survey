@@ -45,14 +45,14 @@ namespace Oqtane.Survey.Repository
         }
         #endregion
 
-        #region public Task<OqtaneSurvey> GetSurvey(int Id)
-        public Task<OqtaneSurvey> GetSurvey(int Id)
+        #region public OqtaneSurvey GetSurvey(int Id)
+        public OqtaneSurvey GetSurvey(int Id)
         {
-            return Task.FromResult(_db.OqtaneSurvey
+            return _db.OqtaneSurvey
                 .Include(x => x.OqtaneSurveyItem)
                 .ThenInclude(x => x.OqtaneSurveyItemOption)
                 .Where(x => x.SurveyId == Id)
-                .FirstOrDefault());
+                .FirstOrDefault();
         }
         #endregion
 
@@ -180,12 +180,12 @@ namespace Oqtane.Survey.Repository
                 _db.SaveChanges();
 
                 // Set position
-                int CoutOfSurveyItems =
+                int CountOfSurveyItems =
                     _db.OqtaneSurveyItem
                     .Where(x => x.SurveyNavigation.SurveyId == NewSurveyItem.SurveyNavigation.SurveyId)
                     .Count();
 
-                objSurveyItem.Position = CoutOfSurveyItems;
+                objSurveyItem.Position = CountOfSurveyItems;
                 _db.SaveChanges();
 
                 return Task.FromResult(objSurveyItem);
@@ -251,7 +251,7 @@ namespace Oqtane.Survey.Repository
 
         // Survey Answers
 
-        #region public Task<bool> CreateSurveyAnswersAsync(Survey paramDTOSurvey)
+        #region public Task<bool> CreateSurveyAnswersAsync(Models.Survey paramDTOSurvey)
         public Task<bool> CreateSurveyAnswersAsync(Models.Survey paramDTOSurvey)
         {
             try

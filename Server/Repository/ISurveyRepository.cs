@@ -9,7 +9,7 @@ namespace Oqtane.Survey.Repository
     {
         Task<List<OqtaneSurvey>> GetAllSurveysAsync();
         List<OqtaneSurvey> GetAllSurveysByModule(int ModuleId);
-        Task<OqtaneSurvey> GetSurvey(int Id);
+        OqtaneSurvey GetSurvey(int Id);
         Task<OqtaneSurvey> CreateSurveyAsync(OqtaneSurvey NewSurvey);
         Task<OqtaneSurvey> UpdateSurveyAsync(OqtaneSurvey objExistingSurvey);
         Task<bool> DeleteSurveyAsync(OqtaneSurvey objExistingSurvey);

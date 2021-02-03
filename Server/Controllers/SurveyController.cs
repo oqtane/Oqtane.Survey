@@ -8,6 +8,8 @@ using Oqtane.Infrastructure;
 using Oqtane.Survey.Models;
 using Oqtane.Survey.Repository;
 using Oqtane.Repository;
+using Oqtane.Survey.Server.Repository;
+using System;
 
 namespace Oqtane.Survey.Controllers
 {
@@ -36,8 +38,8 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.ViewModule)]
         public IEnumerable<Models.Survey> Get(string moduleid)
         {
-            //FIX return _SurveyRepository.GetAllSurveysByModule(int.Parse(moduleid));
-            return new List<Models.Survey>();
+            var colSurveys = _SurveyRepository.GetAllSurveysByModule(int.Parse(moduleid));
+            return ConvertToSurveys(colSurveys);
         }
 
         // GET api/<controller>/5
@@ -45,13 +47,16 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.ViewModule)]
         public Models.Survey Get(int id)
         {
-            // FIX Models.Survey Survey = _SurveyRepository.GetSurvey(id);
-            //if (Survey != null && Survey.ModuleId != _entityId)
-            //{
-            //    Survey = null;
-            //}
-            //return Survey;
-            return new Models.Survey();
+            var objSurvey = _SurveyRepository.GetSurvey(id);
+
+            Models.Survey Survey = ConvertToSurvey(objSurvey);
+
+            if (Survey != null && Survey.ModuleId != _entityId)
+            {
+                Survey = null;
+            }
+
+            return Survey;
         }
 
         // POST api/<controller>
@@ -98,5 +103,79 @@ namespace Oqtane.Survey.Controllers
             //    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Survey Deleted {SurveyId}", id);
             //}
         }
+
+        // Utility
+        #region private IEnumerable<Models.Survey> ConvertToSurveys(List<OqtaneSurvey> colOqtaneSurveys)
+        private IEnumerable<Models.Survey> ConvertToSurveys(List<OqtaneSurvey> colOqtaneSurveys)
+        {
+            List<Models.Survey> colSurveyCollection = new List<Models.Survey>();
+
+            foreach (var objOqtaneSurvey in colOqtaneSurveys)
+            {
+                // Convert to Survey
+                Models.Survey objAddSurvey = ConvertToSurvey(objOqtaneSurvey);
+
+                // Add to Collection
+                colSurveyCollection.Add(objAddSurvey);
+            }
+
+            return colSurveyCollection;
+        }
+        #endregion
+
+        #region private static Models.Survey ConvertToSurvey(OqtaneSurvey objOqtaneSurvey)
+        private Models.Survey ConvertToSurvey(OqtaneSurvey objOqtaneSurvey)
+        {
+            // Create new Object
+            Models.Survey objAddSurvey = new Models.Survey();
+
+            objAddSurvey.SurveyId = objOqtaneSurvey.SurveyId;
+            objAddSurvey.ModuleId = objOqtaneSurvey.SurveyId;
+            objAddSurvey.SurveyName = objOqtaneSurvey.SurveyName;
+            objAddSurvey.CreatedBy = objOqtaneSurvey.CreatedBy;
+            objAddSurvey.CreatedOn = objOqtaneSurvey.CreatedOn;
+            objAddSurvey.ModifiedBy = objOqtaneSurvey.ModifiedBy;
+            objAddSurvey.ModifiedOn = objOqtaneSurvey.ModifiedOn;
+            objAddSurvey.UserId = objOqtaneSurvey.UserId;
+
+            // Create new Collection
+            objAddSurvey.SurveyItem = new List<SurveyItem>();
+
+            foreach (OqtaneSurveyItem objOqtaneSurveyItem in objOqtaneSurvey.OqtaneSurveyItem)
+            {
+                // Create new Object
+                Models.SurveyItem objAddSurveyItem = new SurveyItem();
+
+                objAddSurveyItem.Id = objOqtaneSurveyItem.Id;
+                objAddSurveyItem.ItemLabel = objOqtaneSurveyItem.ItemLabel;
+                objAddSurveyItem.ItemType = objOqtaneSurveyItem.ItemType;
+                objAddSurveyItem.ItemValue = objOqtaneSurveyItem.ItemValue;
+                objAddSurveyItem.Position = objOqtaneSurveyItem.Position;
+                objAddSurveyItem.Required = objOqtaneSurveyItem.Required;
+                objAddSurveyItem.SurveyChoiceId = objOqtaneSurveyItem.SurveyChoiceId;
+
+                // Create new Collection
+                objAddSurveyItem.SurveyItemOption = new List<SurveyItemOption>();
+
+                foreach (OqtaneSurveyItemOption objOqtaneSurveyItemOption in objOqtaneSurveyItem.OqtaneSurveyItemOption)
+                {
+                    // Create new Object
+                    Models.SurveyItemOption objAddSurveyItemOption = new SurveyItemOption();
+
+                    objAddSurveyItemOption.Id = objOqtaneSurveyItemOption.Id;
+                    objAddSurveyItemOption.OptionLabel = objOqtaneSurveyItemOption.OptionLabel;
+
+                    // Add to Collection
+                    objAddSurveyItem.SurveyItemOption.Add(objAddSurveyItemOption);
+                }
+
+                // Add to Collection
+                objAddSurvey.SurveyItem.Add(objAddSurveyItem);
+            }
+
+            return objAddSurvey;
+        } 
+        #endregion
+
     }
 }
