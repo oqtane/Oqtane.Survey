@@ -2,6 +2,7 @@
 using Oqtane.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Oqtane.Survey.Server.Repository
 {
@@ -12,6 +13,7 @@ namespace Oqtane.Survey.Server.Repository
             OqtaneSurveyItem = new HashSet<OqtaneSurveyItem>();
         }
 
+        [Key]
         public int SurveyId { get; set; }
         public int UserId { get; set; }
         public int ModuleId { get; set; }

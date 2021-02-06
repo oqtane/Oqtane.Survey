@@ -85,9 +85,7 @@ namespace Oqtane.Survey.Repository
                     .HasConstraintName("FK_OqtaneSurveyItemOption_SurveyItem");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
