@@ -54,8 +54,9 @@ namespace Oqtane.Survey.Manager
             {
                 foreach(var Survey in Surveys)
                 {
-                    _SurveyRepository.CreateSurveyAsync(
-                        new OqtaneSurvey { 
+                    _SurveyRepository.CreateSurvey(
+                        new Models.Survey
+                        { 
                             ModuleId = module.ModuleId, 
                             SurveyName = Survey.SurveyName,
                             UserId = Survey.UserId

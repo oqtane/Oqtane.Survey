@@ -72,7 +72,7 @@ namespace Oqtane.Survey.Controllers
                 // Add User to Survey object
                 Survey.UserId = User.UserId;
 
-                // FIX Survey = _SurveyRepository.AddSurvey(Survey);
+                Survey = ConvertToSurvey(_SurveyRepository.CreateSurvey(Survey));
                 _logger.Log(LogLevel.Information, this, LogFunction.Create, "Survey Added {Survey}", Survey);
             }
             return Survey;
