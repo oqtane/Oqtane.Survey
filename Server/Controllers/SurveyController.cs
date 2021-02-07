@@ -83,11 +83,11 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public Models.Survey Put(int id, [FromBody] Models.Survey Survey)
         {
-            // FIX if (ModelState.IsValid && Survey.ModuleId == _entityId)
-            //{
-            //    Survey = _SurveyRepository.UpdateSurvey(Survey);
-            //    _logger.Log(LogLevel.Information, this, LogFunction.Update, "Survey Updated {Survey}", Survey);
-            //}
+            if (ModelState.IsValid && Survey.ModuleId == _entityId)
+            {
+                Survey = ConvertToSurvey(_SurveyRepository.UpdateSurvey(Survey));
+                _logger.Log(LogLevel.Information, this, LogFunction.Update, "Survey Updated {Survey}", Survey);
+            }
             return Survey;
         }
 

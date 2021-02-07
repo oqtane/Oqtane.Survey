@@ -11,7 +11,7 @@ namespace Oqtane.Survey.Repository
         List<OqtaneSurvey> GetAllSurveysByModule(int ModuleId);
         OqtaneSurvey GetSurvey(int Id);
         OqtaneSurvey CreateSurvey(Models.Survey NewSurvey);
-        Task<OqtaneSurvey> UpdateSurveyAsync(OqtaneSurvey objExistingSurvey);
+        OqtaneSurvey UpdateSurvey(Models.Survey objExistingSurvey);
         Task<bool> DeleteSurveyAsync(OqtaneSurvey objExistingSurvey);
         Task<List<OqtaneSurveyItem>> GetAllSurveyItemsAsync(int SurveyId);
         Task<OqtaneSurveyItem> GetSurveyItemAsync(int SurveyItemId);

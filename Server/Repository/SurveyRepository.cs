@@ -82,8 +82,8 @@ namespace Oqtane.Survey.Repository
         }
         #endregion
 
-        #region public Task<OqtaneSurvey> UpdateSurveyAsync(OqtaneSurvey objExistingSurvey)
-        public Task<OqtaneSurvey> UpdateSurveyAsync(OqtaneSurvey objExistingSurvey)
+        #region public OqtaneSurvey UpdateSurvey(Models.Survey objExistingSurvey)
+        public OqtaneSurvey UpdateSurvey(Models.Survey objExistingSurvey)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace Oqtane.Survey.Repository
 
                 _db.SaveChanges();
 
-                return Task.FromResult(ExistingSurvey);
+                return ExistingSurvey;
             }
             catch
             {
