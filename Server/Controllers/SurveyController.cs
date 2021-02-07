@@ -42,7 +42,7 @@ namespace Oqtane.Survey.Controllers
             return ConvertToSurveys(colSurveys);
         }
 
-        // GET api/<controller>/5
+        // GET api/<controller>?/5
         [HttpGet("{id}")]
         [Authorize(Policy = PolicyNames.ViewModule)]
         public Models.Survey Get(int id)
@@ -130,7 +130,7 @@ namespace Oqtane.Survey.Controllers
             Models.Survey objAddSurvey = new Models.Survey();
 
             objAddSurvey.SurveyId = objOqtaneSurvey.SurveyId;
-            objAddSurvey.ModuleId = objOqtaneSurvey.SurveyId;
+            objAddSurvey.ModuleId = objOqtaneSurvey.ModuleId;
             objAddSurvey.SurveyName = objOqtaneSurvey.SurveyName;
             objAddSurvey.CreatedBy = objOqtaneSurvey.CreatedBy;
             objAddSurvey.CreatedOn = objOqtaneSurvey.CreatedOn;
