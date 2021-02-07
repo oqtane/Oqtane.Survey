@@ -105,12 +105,12 @@ namespace Oqtane.Survey.Repository
         }
         #endregion
 
-        #region public Task<bool> DeleteSurveyAsync(OqtaneSurvey objExistingSurvey)
-        public Task<bool> DeleteSurveyAsync(OqtaneSurvey objExistingSurvey)
+        #region public bool DeleteSurvey(int id)
+        public bool DeleteSurvey(int id)
         {
             var ExistingSurvey =
                 _db.OqtaneSurvey
-                .Where(x => x.SurveyId == objExistingSurvey.SurveyId)
+                .Where(x => x.SurveyId == id)
                 .FirstOrDefault();
 
             if (ExistingSurvey != null)
@@ -120,10 +120,10 @@ namespace Oqtane.Survey.Repository
             }
             else
             {
-                return Task.FromResult(false);
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
         }
         #endregion
 

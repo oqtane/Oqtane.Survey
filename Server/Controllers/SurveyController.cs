@@ -96,12 +96,22 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public void Delete(int id)
         {
-            // FIX Models.Survey Survey = _SurveyRepository.GetSurvey(id);
-            //if (Survey != null && Survey.ModuleId == _entityId)
-            //{
-            //    _SurveyRepository.DeleteSurvey(id);
-            //    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Survey Deleted {SurveyId}", id);
-            //}
+            var objSurvey = _SurveyRepository.GetSurvey(id);
+
+            Models.Survey Survey = ConvertToSurvey(objSurvey);
+
+            if (Survey != null && Survey.ModuleId == _entityId)
+            {
+                bool boolResult = _SurveyRepository.DeleteSurvey(id);
+                if (boolResult)
+                {
+                    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Survey Deleted {SurveyId}", id);
+                }
+                else
+                {
+                    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Error: Survey *NOT* Deleted {SurveyId}", id);
+                }
+            }
         }
 
         // Utility
