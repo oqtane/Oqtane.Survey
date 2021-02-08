@@ -6,47 +6,37 @@
 @inject ISurveyService SurveyService
 @inject NavigationManager NavigationManager
 
-@if (_Surveys == null)
+@if (_Survey == null)
 {
     <p><em>Loading...</em></p> }
 else
 {
     <br />
     <ActionLink Action="Add" Security="SecurityAccessLevel.Edit"
-                Text="Add TestExternal" />
+                Text="Edit Survey" />
     <br />
     <br />
-    @if (_Surveys.Count != 0)
+    @if (_Survey != null)
     {
-        <RadzenDataList WrapItems="true" AllowPaging="true"
-                        Data="@_Surveys"
-                        PageSize="2" TItem="Survey">
-            <Template Context="context">
-                <RadzenCard Style="width:300px;">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h2>Name: <b>@context.SurveyName</b></h2>
-                            <p>
-                                <ActionLink Action="Edit"
-                                            Parameters="@($"id=" +
-                                                      context.SurveyId.ToString())" />
-                                &nbsp;&nbsp;
-                                <ActionDialog Header="Delete RadzenTest"
-                                              Message="@("Are You Sure You Wish To Delete The "
-                                                        + context.SurveyName + " Survey?")"
-                                              Action="Delete" Security="SecurityAccessLevel.Edit"
-                                              Class="btn btn-danger"
-                                              OnClick="@(async () => await Delete(context))" />
-                            </p>
-                        </div>
-                    </div>
-                </RadzenCard>
-            </Template>
-        </RadzenDataList>
-    }
-    else
-    {
-        <p>No Surveys To Display</p>
+        <RadzenCard Style="width:300px;">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Name: <b>@_Survey.SurveyName</b></h2>
+                    <p>
+                        <ActionLink Action="Edit"
+                                    Parameters="@($"id=" +
+                                                _Survey.SurveyId.ToString())" />
+                        &nbsp;&nbsp;
+                        <ActionDialog Header="Delete RadzenTest"
+                                        Message="@("Are You Sure You Wish To Delete The "
+                                                + _Survey.SurveyName + " Survey?")"
+                                        Action="Delete" Security="SecurityAccessLevel.Edit"
+                                        Class="btn btn-danger"
+                                        OnClick="@(async () => await Delete(_Survey))" />
+                    </p>
+                </div>
+            </div>
+        </RadzenCard>
     }
 }
 
@@ -57,13 +47,13 @@ else
         new Resource { ResourceType = ResourceType.Script, Url = ModulePath() + "Module.js" }
     };
 
-    List<Survey> _Surveys;
+    Survey _Survey;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _Surveys = await SurveyService.GetSurveysAsync(ModuleState.ModuleId);
+            _Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
         }
         catch (Exception ex)
         {
@@ -76,9 +66,9 @@ else
     {
         try
         {
-            await SurveyService.DeleteSurveyAsync(Survey.SurveyId, ModuleState.ModuleId);
+            await SurveyService.DeleteSurveyAsync(ModuleState.ModuleId);
             await logger.LogInformation("Survey Deleted {Survey}", Survey);
-            _Surveys = await SurveyService.GetSurveysAsync(ModuleState.ModuleId);
+            _Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
             StateHasChanged();
         }
         catch (Exception ex)

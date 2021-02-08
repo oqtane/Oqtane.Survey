@@ -26,9 +26,9 @@ namespace Oqtane.Survey.Services
             return Surveys.OrderBy(item => item.SurveyName).ToList();
         }
 
-        public async Task<Models.Survey> GetSurveyAsync(int SurveyId, int ModuleId)
+        public async Task<Models.Survey> GetSurveyAsync(int ModuleId)
         {
-            return await GetJsonAsync<Models.Survey>(CreateAuthorizationPolicyUrl($"{Apiurl}/{SurveyId}", ModuleId));
+            return await GetJsonAsync<Models.Survey>(CreateAuthorizationPolicyUrl($"{Apiurl}/{ModuleId}", ModuleId));
         }
 
         public async Task<Models.Survey> AddSurveyAsync(Models.Survey Survey)
@@ -38,12 +38,12 @@ namespace Oqtane.Survey.Services
 
         public async Task<Models.Survey> UpdateSurveyAsync(Models.Survey Survey)
         {
-            return await PutJsonAsync<Models.Survey>(CreateAuthorizationPolicyUrl($"{Apiurl}/{Survey.SurveyId}", Survey.ModuleId), Survey);
+            return await PutJsonAsync<Models.Survey>(CreateAuthorizationPolicyUrl($"{Apiurl}/{Survey.ModuleId}", Survey.ModuleId), Survey);
         }
 
-        public async Task DeleteSurveyAsync(int SurveyId, int ModuleId)
+        public async Task DeleteSurveyAsync(int ModuleId)
         {
-            await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{SurveyId}", ModuleId));
+            await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{ModuleId}", ModuleId));
         }
     }
 }

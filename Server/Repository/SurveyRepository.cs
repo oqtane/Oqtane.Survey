@@ -48,10 +48,12 @@ namespace Oqtane.Survey.Repository
         #region public OqtaneSurvey GetSurvey(int Id)
         public OqtaneSurvey GetSurvey(int Id)
         {
+            // There is one Survey per Module
+            // so we get the survey by ModuleId
             return _db.OqtaneSurvey
                 .Include(x => x.OqtaneSurveyItem)
                 .ThenInclude(x => x.OqtaneSurveyItemOption)
-                .Where(x => x.SurveyId == Id)
+                .Where(x => x.ModuleId == Id)
                 .FirstOrDefault();
         }
         #endregion

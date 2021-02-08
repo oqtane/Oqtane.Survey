@@ -27,10 +27,13 @@
 }
 
 @code {
+    // This control can only be reached by users with Edit permission
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
 
+    // This control responds to the Add or Edit ActionLink commands
     public override string Actions => "Add,Edit";
 
+    // Title for the control
     public override string Title => "Manage Survey";
 
     public override List<Resource> Resources => new List<Resource>()
@@ -51,10 +54,10 @@
         {
             if (PageState.Action == "Edit")
             {
-                _id = Int32.Parse(PageState.QueryString["id"]);
-                Survey Survey = await SurveyService.GetSurveyAsync(_id, ModuleState.ModuleId);
+                Survey Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
                 if (Survey != null)
                 {
+                    _id = Survey.SurveyId;
                     _surveyname = Survey.SurveyName;
                     _createdby = Survey.CreatedBy;
                     _createdon = Survey.CreatedOn;
@@ -84,7 +87,7 @@
             }
             else
             {
-                Survey Survey = await SurveyService.GetSurveyAsync(_id, ModuleState.ModuleId);
+                Survey Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
                 Survey.SurveyName = _surveyname;
                 await SurveyService.UpdateSurveyAsync(Survey);
                 await logger.LogInformation("Survey Updated {Survey}", Survey);

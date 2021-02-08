@@ -8,12 +8,12 @@ namespace Oqtane.Survey.Services
     {
         Task<List<Models.Survey>> GetSurveysAsync(int ModuleId);
 
-        Task<Models.Survey> GetSurveyAsync(int SurveyId, int ModuleId);
+        Task<Models.Survey> GetSurveyAsync(int ModuleId);
 
         Task<Models.Survey> AddSurveyAsync(Models.Survey Survey);
 
         Task<Models.Survey> UpdateSurveyAsync(Models.Survey Survey);
 
-        Task DeleteSurveyAsync(int SurveyId, int ModuleId);
+        Task DeleteSurveyAsync(int ModuleId);
     }
 }

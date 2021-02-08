@@ -136,6 +136,11 @@ namespace Oqtane.Survey.Controllers
         #region private static Models.Survey ConvertToSurvey(OqtaneSurvey objOqtaneSurvey)
         private Models.Survey ConvertToSurvey(OqtaneSurvey objOqtaneSurvey)
         {
+            if(objOqtaneSurvey == null)
+            {
+                return new Models.Survey();
+            }
+
             // Create new Object
             Models.Survey objAddSurvey = new Models.Survey();
 
@@ -186,6 +191,5 @@ namespace Oqtane.Survey.Controllers
             return objAddSurvey;
         } 
         #endregion
-
     }
 }
