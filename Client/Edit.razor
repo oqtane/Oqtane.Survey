@@ -77,9 +77,11 @@
     {
         try
         {
-            if (PageState.Action == "Add")
+            Survey Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
+
+            if (Survey == null)
             {
-                Survey Survey = new Survey();
+                Survey = new Survey();
                 Survey.ModuleId = ModuleState.ModuleId;
                 Survey.SurveyName = _surveyname;
                 Survey = await SurveyService.AddSurveyAsync(Survey);
@@ -87,7 +89,6 @@
             }
             else
             {
-                Survey Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
                 Survey.SurveyName = _surveyname;
                 await SurveyService.UpdateSurveyAsync(Survey);
                 await logger.LogInformation("Survey Updated {Survey}", Survey);

@@ -6,38 +6,28 @@
 @inject ISurveyService SurveyService
 @inject NavigationManager NavigationManager
 
-@if (_Survey == null)
+<br />
+<ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
+            Text="Edit Survey" />
+<br />
+<br />
+@if (_Survey != null)
 {
-    <p><em>Loading...</em></p> }
-else
-{
-    <br />
-    <ActionLink Action="Add" Security="SecurityAccessLevel.Edit"
-                Text="Edit Survey" />
-    <br />
-    <br />
-    @if (_Survey != null)
-    {
-        <RadzenCard Style="width:300px;">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Name: <b>@_Survey.SurveyName</b></h2>
-                    <p>
-                        <ActionLink Action="Edit"
-                                    Parameters="@($"id=" +
-                                                _Survey.SurveyId.ToString())" />
-                        &nbsp;&nbsp;
-                        <ActionDialog Header="Delete RadzenTest"
-                                        Message="@("Are You Sure You Wish To Delete The "
-                                                + _Survey.SurveyName + " Survey?")"
-                                        Action="Delete" Security="SecurityAccessLevel.Edit"
-                                        Class="btn btn-danger"
-                                        OnClick="@(async () => await Delete(_Survey))" />
-                    </p>
-                </div>
+    <RadzenCard Style="width:300px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Name: <b>@_Survey.SurveyName</b></h2>
+                <p>
+                    <ActionDialog Header="Delete Survey"
+                                    Message="@("Are You Sure You Wish To Delete The "
+                                            + _Survey.SurveyName + " Survey?")"
+                                    Action="Delete" Security="SecurityAccessLevel.Edit"
+                                    Class="btn btn-danger"
+                                    OnClick="@(async () => await Delete(_Survey))" />
+                </p>
             </div>
-        </RadzenCard>
-    }
+        </div>
+    </RadzenCard>
 }
 
 @code {
