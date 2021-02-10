@@ -112,7 +112,7 @@ namespace Oqtane.Survey.Repository
         {
             var ExistingSurvey =
                 _db.OqtaneSurvey
-                .Where(x => x.SurveyId == id)
+                .Where(x => x.ModuleId == id)
                 .FirstOrDefault();
 
             if (ExistingSurvey != null)
