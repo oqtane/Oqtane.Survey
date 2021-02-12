@@ -13,7 +13,7 @@
             <Label For="surveyname" HelpText="Enter a name">Survey Name: </Label>
         </td>
         <td>
-            <input id="surveyname" class="form-control" @bind="@_surveyname" />
+            <input id="surveyname" class="form-control" @bind="@Survey.SurveyName" />
         </td>
     </tr>
 </table>
@@ -21,10 +21,6 @@
 <NavLink class="btn btn-secondary" href="@NavigateUrl()">Cancel</NavLink>
 <br />
 <br />
-@if (PageState.Action == "Edit")
-{
-    <AuditInfo CreatedBy="@_createdby" CreatedOn="@_createdon" ModifiedBy="@_modifiedby" ModifiedOn="@_modifiedon"></AuditInfo>
-}
 
 @code {
     // This control can only be reached by users with Edit permission
@@ -41,34 +37,30 @@
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
 
-    int _id;
-    string _surveyname;
-    string _createdby;
-    DateTime _createdon;
-    string _modifiedby;
-    DateTime _modifiedon;
+    Survey Survey = new Survey();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            if (PageState.Action == "Edit")
+            Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
+
+            if (Survey == null)
             {
-                Survey Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
-                if (Survey != null)
-                {
-                    _id = Survey.SurveyId;
-                    _surveyname = Survey.SurveyName;
-                    _createdby = Survey.CreatedBy;
-                    _createdon = Survey.CreatedOn;
-                    _modifiedby = Survey.ModifiedBy;
-                    _modifiedon = Survey.ModifiedOn;
-                }
+                Survey = new Survey();
+                Survey.ModuleId = ModuleState.ModuleId;
+                Survey.SurveyName = "New Survey";
             }
         }
         catch (Exception ex)
         {
-            await logger.LogError(ex, "Error Loading Survey {SurveyId} {Error}", _id, ex.Message);
+            if (Survey == null)
+            {
+                Survey = new Survey();
+                Survey.SurveyId = -1;
+            }
+
+            await logger.LogError(ex, "Error Loading Survey {SurveyId} {Error}", Survey.SurveyId, ex.Message);
             AddModuleMessage("Error Loading Survey", MessageType.Error);
         }
     }
@@ -77,22 +69,23 @@
     {
         try
         {
-            Survey Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
+            Survey SaveSurvey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
 
-            if (Survey == null)
+            if (SaveSurvey == null)
             {
-                Survey = new Survey();
-                Survey.ModuleId = ModuleState.ModuleId;
-                Survey.SurveyName = _surveyname;
-                Survey = await SurveyService.AddSurveyAsync(Survey);
-                await logger.LogInformation("Survey Added {Survey}", Survey);
+                SaveSurvey = new Survey();
+                SaveSurvey.ModuleId = ModuleState.ModuleId;
+                SaveSurvey.SurveyName = Survey.SurveyName;
+                SaveSurvey = await SurveyService.AddSurveyAsync(SaveSurvey);
+                await logger.LogInformation("Survey Added {Survey}", SaveSurvey);
             }
             else
             {
-                Survey.SurveyName = _surveyname;
-                await SurveyService.UpdateSurveyAsync(Survey);
-                await logger.LogInformation("Survey Updated {Survey}", Survey);
+                SaveSurvey.SurveyName = Survey.SurveyName;
+                await SurveyService.UpdateSurveyAsync(SaveSurvey);
+                await logger.LogInformation("Survey Updated {Survey}", SaveSurvey);
             }
+
             NavigationManager.NavigateTo(NavigateUrl());
         }
         catch (Exception ex)
