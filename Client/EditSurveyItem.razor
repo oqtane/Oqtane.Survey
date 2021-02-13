@@ -1,0 +1,238 @@
+﻿@namespace Oqtane.Survey
+@inherits ModuleBase
+
+@using System.Linq;
+@using Oqtane.Modules.Controls
+@using Oqtane.Survey.Services
+@using Oqtane.Survey.Models
+
+@inject ISurveyService SurveyService
+@inject NavigationManager NavigationManager
+@*
+    @using BlazorSimpleSurvey.Data;
+    @inject AuthenticationStateProvider AuthenticationStateProvider
+    @inherits OwningComponentBase<SimpleSurveyService>
+*@
+@strError
+<RadzenCard Style="margin-bottom: 20px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div><b>Name</b></div>
+            <RadzenTextBox @bind-Value="SelectedSurveyItem.ItemLabel"
+                           Style="width: 400px" />
+            <br />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <div><b>Type</b></div>
+            <RadzenDropDown AllowClear="true" TValue="string"
+                            Data="@FormTypes"
+                            @bind-Value="SelectedSurveyItem.ItemType" />
+        </div>
+        <div class="col-md-6">
+            <div><b>Required</b></div>
+            <RadzenCheckBox @bind-Value="boolRequired"
+                            Style="margin-bottom: 20px" TValue="bool" />
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @if ((SelectedSurveyItem.ItemType == "Dropdown")
+            || (SelectedSurveyItem.ItemType == "Multi-Select Dropdown"))
+            {
+                <RadzenButton Click="OpenPopup"
+                              Text="Edit Options"
+                              Size="Radzen.ButtonSize.Small"
+                              ButtonStyle="ButtonStyle.Info" />
+            }
+        </div>
+    </div>
+</RadzenCard>
+<RadzenButton Click="UpdateSurveyItem"
+              Text="Save" ButtonStyle="ButtonStyle.Success"
+              Style="margin-bottom: 10px; width: 150px" />
+@if (SelectedSurveyItem.Id > 0)
+{
+    @*<RadzenButton Click="DeleteSurveyItemDialog"
+        ButtonStyle="ButtonStyle.Danger"
+        Text="Delete"
+        Style="margin-bottom: 10px; width: 150px" />*@
+}
+@if (ShowPopup)
+{
+    <div class="modal" tabindex="-1" style="display:block;background-color:gainsboro" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Options</h3>
+                </div>
+                <div class="modal-body">
+                    <ul style="list-style-type:none;">
+                        @foreach (var option in SelectedSurveyItem.SurveyItemOption.OrderBy(x => x.Id))
+                        {
+                            <li>
+                                <div Style="margin-bottom: 10px; width: 150px">
+                                    <RadzenButton Click="(() => RemoveOption(option))"
+                                                  Icon="delete"
+                                                  Size="Radzen.ButtonSize.Small"
+                                                  ButtonStyle="ButtonStyle.Danger" />
+                                    <b>@option.OptionLabel</b>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                    <RadzenTextBox @bind-Value="newOption"
+                                   Style="width: 200px" />
+                    <RadzenButton Click="AddOption"
+                                  Text="Add"
+                                  Size="Radzen.ButtonSize.Small"
+                                  ButtonStyle="ButtonStyle.Success" />
+                    <RadzenButton Click="ClosePopup"
+                                  Text="Close"
+                                  Size="Radzen.ButtonSize.Small"
+                                  ButtonStyle="ButtonStyle.Secondary" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@code {
+    [Parameter] public SurveyItem SelectedSurveyItem { get; set; }
+
+    #region Control Definition
+    // This control can only be reached by users with Edit permission
+    public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
+
+    // This control responds to the Add or Edit ActionLink commands
+    public override string Actions => "EditSurveyItem";
+
+    // Title for the control
+    public override string Title => "Edit Survey Item";
+
+    public override List<Resource> Resources => new List<Resource>()
+{
+        new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
+    };
+    #endregion
+
+    int _id;
+    string strError = "";
+    bool ShowPopup = false;
+    bool boolRequired = false;
+
+    IEnumerable<string> FormTypes = new string[]
+    { "Text Box", "Text Area", "Date", "Date Time", "Dropdown", "Multi-Select Dropdown" };
+
+    private string newOption;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (PageState.QueryString.ContainsKey("id"))
+            {
+                _id = Int32.Parse(PageState.QueryString["id"]);
+            }
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Loading Survey Item {_id} {Error}", _id, ex.Message);
+            AddModuleMessage("Error Loading Survey", MessageType.Error);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        boolRequired = (SelectedSurveyItem.Required == 1);
+    }
+
+    async Task UpdateSurveyItem()
+    {
+        //try
+        //{
+        //    if(boolRequired)
+        //    {
+        //        SelectedSurveyItem.Required = 1;
+        //    }
+        //    else
+        //    {
+        //        SelectedSurveyItem.Required = 0;
+        //    }
+
+        //    if (SelectedSurveyItem.Id == -1)
+        //    {
+        //        SelectedSurveyItem =
+        //            await @Service.CreateSurveyItemAsync(SelectedSurveyItem);
+        //    }
+        //    else
+        //    {
+        //        SelectedSurveyItem =
+        //            await @Service.UpdateSurveyItemAsync(SelectedSurveyItem);
+        //    }
+
+        //    dialogService.Close(SelectedSurveyItem);
+        //}
+        //catch (Exception ex)
+        //{
+        //    strError = ex.GetBaseException().Message;
+        //}
+    }
+
+    void OpenPopup()
+    {
+        // Open Popup
+        ShowPopup = true;
+    }
+
+    void ClosePopup()
+    {
+        // Close Popup
+        ShowPopup = false;
+    }
+
+    private void AddOption()
+    {
+        if (!string.IsNullOrWhiteSpace(newOption))
+        {
+            SelectedSurveyItem.SurveyItemOption
+                .Add(new SurveyItemOption { OptionLabel = newOption });
+
+            newOption = string.Empty;
+        }
+    }
+
+    private void RemoveOption(SurveyItemOption paramSurveyItemOption)
+    {
+        // Remove the option from the collection
+        SelectedSurveyItem.SurveyItemOption.Remove(paramSurveyItemOption);
+    }
+
+    async Task DeleteSurveyItem()
+    {
+        //var result = await @Service.DeleteSurveyItemAsync(SelectedSurveyItem);
+
+        //// Set the Id to -1 so we know it is deleted
+        //SelectedSurveyItem.Id = -1;
+
+        //dialogService.Close(SelectedSurveyItem);
+        //dialogService.Close(SelectedSurveyItem);
+    }
+
+    @*async Task DeleteSurveyItemDialog() =>
+            await dialogService.OpenAsync("Delete Survey Item", ds =>
+        @<RadzenCard Style="padding: 20px;">
+            <p Style="margin-bottom: 10px;">Confirm?</p>
+            <div class="row">
+                <div class="col-md-12">
+                    <RadzenButton Text="Yes" Click="DeleteSurveyItem"
+                                  Style="margin-bottom: 10px; width: 150px" />
+                    <RadzenButton Text="No" Click="()=> ds.Close(false)"
+                                  ButtonStyle="ButtonStyle.Secondary"
+                                  Style="margin-bottom: 10px; width: 150px" />
+                </div>
+            </div>
+        </RadzenCard>);*@
+}
