@@ -7,25 +7,6 @@
 @inject ISurveyService SurveyService
 @inject NavigationManager NavigationManager
 
-@*<RadzenButton ButtonStyle="ButtonStyle.Success"
-              Style="vertical-align:top"
-              Size="Radzen.ButtonSize.Medium"
-              Icon="add"
-              MouseEnter="@(args => ShowTooltip(args, new TooltipOptions(){ Text= "New Survey Item" }))"
-              Click="@(args =>
-                                  dialogService.Open<EditSurveyItem>($"New Survey Item",
-                                  new Dictionary<string, object>() { { "SelectedSurveyItem", new SurveyItem() { Id = -1 } } },
-                                  new DialogOptions() { Width = "500px", Height = "380px" }))" />
-
-<RadzenButton ButtonStyle="ButtonStyle.Secondary"
-              Style="vertical-align:top"
-              Size="Radzen.ButtonSize.Medium"
-              MouseEnter="@(args => ShowTooltip(args, new TooltipOptions(){ Text= "Edit Survey" }))"
-              Icon="edit" Click="@(args =>
-                                  dialogService.Open<EditSurvey>($"Edit Survey",
-                                  new Dictionary<string, object>() { { "SelectedSurvey", Survey } },
-                                  new DialogOptions() { Width = "500px", Height = "280px" }))" />*@
-
 <ActionLink Action="EditSurvey" Security="SecurityAccessLevel.Edit" IconName="pencil" IconOnly="true"          
             Text="Edit Survey" />
 
@@ -124,5 +105,4 @@
         }
     }
     #endregion
-
 }

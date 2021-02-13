@@ -1,17 +1,13 @@
 ﻿@namespace Oqtane.Survey
 @inherits ModuleBase
 
-@using System.Linq;
 @using Oqtane.Modules.Controls
 @using Oqtane.Survey.Services
 @using Oqtane.Survey.Models
+
 @inject ISurveyService SurveyService
 @inject NavigationManager NavigationManager
-@*
-    @using BlazorSimpleSurvey.Data;
-    @inject AuthenticationStateProvider AuthenticationStateProvider
-    @inherits OwningComponentBase<SimpleSurveyService>
-*@
+
 @strError
 <RadzenCard Style="margin-bottom: 20px;">
     <div class="row">
@@ -25,16 +21,15 @@
 <RadzenButton Click="UpdateSurvey"
               Text="Save" ButtonStyle="ButtonStyle.Success"
               Style="margin-bottom: 10px; width: 150px" />
-@*@if (SelectedSurvey.SurveyId > 0)
-    {
-        <RadzenButton Click="DeleteSurveyDialog"
-            ButtonStyle="ButtonStyle.Danger"
-            Text="Delete"
-            Style="margin-bottom: 10px; width: 150px" />
-    }*@
+@if (Survey.SurveyId > 0)
+{
+    <ActionDialog Header="Delete Survey"
+                  Message="@("Are You Sure You Wish To Delete The Survey?")"
+                  Action="Delete" Security="SecurityAccessLevel.Edit"
+                  Class="btn btn-danger"
+                  OnClick="@(async () => await DeleteSurvey())" />
+}
 @code {
-    [Parameter] public Survey SelectedSurvey { get; set; }
-
     #region Control Definition
     // This control can only be reached by users with Edit permission
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
@@ -46,7 +41,7 @@
     public override string Title => "Edit Survey";
 
     public override List<Resource> Resources => new List<Resource>()
-{
+    {
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
     #endregion
@@ -63,6 +58,7 @@
             if (Survey == null)
             {
                 Survey = new Survey();
+                Survey.SurveyId = -1; // So we kno wthis is a new Survey
                 Survey.ModuleId = ModuleState.ModuleId;
                 Survey.SurveyName = "New Survey";
             }
@@ -80,25 +76,28 @@
         }
     }
 
-    void UpdateSurvey()
+    async Task UpdateSurvey()
     {
-        //SelectedSurvey.UserId = UserId;
-
         try
         {
-            //    if (SelectedSurvey.Id == -1)
-            //    {
-            //        SelectedSurvey = await @Service.CreateSurveyAsync(SelectedSurvey);
-            //    }
-            //    else
-            //    {
-            //        SelectedSurvey = await @Service.UpdateSurveyAsync(SelectedSurvey);
-            //    }
+            if (Survey.SurveyId == -1)
+            {
+                // New Survey
+
+                Survey = await SurveyService.AddSurveyAsync(Survey);
+                await logger.LogInformation("Survey Added {Survey}", Survey);
+            }
+            else
+            {
+                // Update Survey
+
+                await SurveyService.UpdateSurveyAsync(Survey);
+                await logger.LogInformation("Survey Updated {Survey}", Survey);
+            }
 
             // Get URL for Edit control
             string strEditURL = EditUrl("Edit");
             NavigationManager.NavigateTo(strEditURL);
-
         }
         catch (Exception ex)
         {
@@ -106,26 +105,18 @@
         }
     }
 
-    @*async Task DeleteSurveyDialog() => await dialogService
-         .OpenAsync("Delete Survey", ds =>
-        @<RadzenCard Style="padding: 20px;">
-            <p Style="margin-bottom: 10px;">Confirm?</p>
-            <div class="row">
-                <div class="col-md-12">
-                    <RadzenButton Text="Yes" Click="DeleteSurvey"
-                                  Style="margin-bottom: 10px; width: 150px" />
-                    <RadzenButton Text="No" Click="()=> ds.Close(false)"
-                                  ButtonStyle="ButtonStyle.Secondary"
-                                  Style="margin-bottom: 10px; width: 150px" />
-                </div>
-            </div>
-        </RadzenCard>);*@
-
-    async Task DeleteSurvey()
+    private async Task DeleteSurvey()
     {
-        //var result = await @Service.DeleteSurveyAsync(SelectedSurvey);
-
-        //dialogService.Close(SelectedSurvey.Id);
-        //dialogService.Close(SelectedSurvey.Id);
+        try
+        {
+            await SurveyService.DeleteSurveyAsync(ModuleState.ModuleId);
+            await logger.LogInformation("Survey Deleted {Survey}", Survey);
+            NavigationManager.NavigateTo(NavigateUrl());
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Deleting Survey {Survey} {Error}", Survey, ex.Message);
+            AddModuleMessage("Error Deleting Survey", MessageType.Error);
+        }
     }
 }
