@@ -7,23 +7,17 @@
 @inject ISurveyService SurveyService
 @inject NavigationManager NavigationManager
 
-<ActionLink Action="EditSurvey" Security="SecurityAccessLevel.Edit" IconName="pencil" IconOnly="true"          
-            Text="Edit Survey" />
-
-<ActionLink Action="EditSurveyItem" Security="SecurityAccessLevel.Edit" IconName="plus" IconOnly="true" 
-            Parameters="@($"id=-1")"
-            Text="Edit Survey Item" />
-
-<table class="table table-borderless">
-    <tr>
-        <td>
-            <Label For="surveyname" HelpText="Enter a name">Survey Name: </Label>
-        </td>
-        <td>
-            <input id="surveyname" class="form-control" @bind="@Survey.SurveyName" />
-        </td>
-    </tr>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <ActionLink Action="EditSurveyItem" Security="SecurityAccessLevel.Edit" IconName="plus" IconOnly="true"
+                    Parameters="@($"id=-1")"
+                    Text="New Survey Item" />
+        <ActionLink Action="EditSurvey" Security="SecurityAccessLevel.Edit" IconName="pencil" IconOnly="true"
+                    Text="Edit Survey" />
+        <label>@Survey.SurveyName</label>
+    </div>
+</div>
+<br />
 <button type="button" class="btn btn-success" @onclick="Save">Save</button>
 <NavLink class="btn btn-secondary" href="@NavigateUrl()">Cancel</NavLink>
 <br />
@@ -43,7 +37,7 @@
     public override List<Resource> Resources => new List<Resource>()
     {
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
-    }; 
+    };
     #endregion
 
     Survey Survey = new Survey();
