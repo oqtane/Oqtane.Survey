@@ -26,10 +26,10 @@
                                   new Dictionary<string, object>() { { "SelectedSurvey", Survey } },
                                   new DialogOptions() { Width = "500px", Height = "280px" }))" />*@
 
-<ActionLink Action="EditSurvey" Security="SecurityAccessLevel.Edit" IconName="add"            
+<ActionLink Action="EditSurvey" Security="SecurityAccessLevel.Edit" IconName="pencil" IconOnly="true"          
             Text="Edit Survey" />
 
-<ActionLink Action="EditSurveyItem" Security="SecurityAccessLevel.Edit" IconName="edit"
+<ActionLink Action="EditSurveyItem" Security="SecurityAccessLevel.Edit" IconName="plus" IconOnly="true" 
             Parameters="@($"id=-1")"
             Text="Edit Survey Item" />
 
