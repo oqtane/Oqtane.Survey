@@ -1,5 +1,5 @@
 ﻿@namespace Oqtane.Survey
-@inherits ModuleBase
+@inherits ModuleBase 
 
 @using System.Linq;
 @using Oqtane.Modules.Controls
@@ -8,11 +8,7 @@
 
 @inject ISurveyService SurveyService
 @inject NavigationManager NavigationManager
-@*
-    @using BlazorSimpleSurvey.Data;
-    @inject AuthenticationStateProvider AuthenticationStateProvider
-    @inherits OwningComponentBase<SimpleSurveyService>
-*@
+
 @strError
 <RadzenCard Style="margin-bottom: 20px;">
     <div class="row">
@@ -118,6 +114,7 @@
     };
     #endregion
 
+    Survey Survey;
     int _id;
     string strError = "";
     bool ShowPopup = false;
@@ -132,6 +129,10 @@
     {
         try
         {
+            // Must create a Survey, in the database,
+            // if one does not already exist
+            Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
+
             if (PageState.QueryString.ContainsKey("id"))
             {
                 _id = Int32.Parse(PageState.QueryString["id"]);

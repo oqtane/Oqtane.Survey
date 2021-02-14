@@ -7,19 +7,25 @@
 @inject NavigationManager NavigationManager
 
 <br />
-<ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
+@if (_Survey != null)
+{
+    <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
             Text="Edit Survey" />
+}
+else
+{
+    <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
+                Text="Create Survey" />
+}
 <br />
 <br />
 @if (_Survey != null)
 {
-    <RadzenCard Style="width:300px;">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Name: <b>@_Survey.SurveyName</b></h2>
-            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Name: <b>@_Survey.SurveyName</b></h4>
         </div>
-    </RadzenCard>
+    </div>
 }
 
 @code {

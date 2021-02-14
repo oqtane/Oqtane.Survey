@@ -19,6 +19,14 @@
 </div>
 <br />
 <button type="button" class="btn btn-success" @onclick="Save">Save</button>
+@if (Survey.SurveyId > 0)
+{
+    <ActionDialog Header="Delete Survey"
+                  Message="@("Are You Sure You Wish To Delete The Survey?")"
+                  Action="Delete" Security="SecurityAccessLevel.Edit"
+                  Class="btn btn-danger"
+                  OnClick="@(async () => await DeleteSurvey())" />
+}
 <NavLink class="btn btn-secondary" href="@NavigateUrl()">Cancel</NavLink>
 <br />
 <br />
@@ -35,7 +43,7 @@
     public override string Title => "Manage Survey";
 
     public override List<Resource> Resources => new List<Resource>()
-    {
+{
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
     #endregion
@@ -48,22 +56,22 @@
         {
             Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
 
-            if (Survey == null)
-            {
-                Survey = new Survey();
-                Survey.ModuleId = ModuleState.ModuleId;
-                Survey.SurveyName = "New Survey";
-            }
-        }
-        catch (Exception ex)
-        {
+            // Must create a Survey, in the database,
+            // if one does not already exist
             if (Survey == null)
             {
                 Survey = new Survey();
                 Survey.SurveyId = -1;
-            }
+                Survey.ModuleId = ModuleState.ModuleId;
+                Survey.SurveyName = "New Survey";
 
-            await logger.LogError(ex, "Error Loading Survey {SurveyId} {Error}", Survey.SurveyId, ex.Message);
+                Survey = await SurveyService.AddSurveyAsync(Survey);
+                await logger.LogInformation("Survey Added {Survey}", Survey);
+            }
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Loading Survey for {ModuleState.ModuleId} {Error}", ModuleState.ModuleId, ex.Message);
             AddModuleMessage("Error Loading Survey", MessageType.Error);
         }
     }
@@ -96,6 +104,23 @@
         {
             await logger.LogError(ex, "Error Saving Survey {Error}", ex.Message);
             AddModuleMessage("Error Saving Survey", MessageType.Error);
+        }
+    }
+    #endregion
+
+    #region private async Task DeleteSurvey()
+    private async Task DeleteSurvey()
+    {
+        try
+        {
+            await SurveyService.DeleteSurveyAsync(ModuleState.ModuleId);
+            await logger.LogInformation("Survey Deleted {Survey}", Survey);
+            NavigationManager.NavigateTo(NavigateUrl());
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Deleting Survey {Survey} {Error}", Survey, ex.Message);
+            AddModuleMessage("Error Deleting Survey", MessageType.Error);
         }
     }
     #endregion

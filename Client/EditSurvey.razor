@@ -21,14 +21,7 @@
 <RadzenButton Click="UpdateSurvey"
               Text="Save" ButtonStyle="ButtonStyle.Success"
               Style="margin-bottom: 10px; width: 150px" />
-@if (Survey.SurveyId > 0)
-{
-    <ActionDialog Header="Delete Survey"
-                  Message="@("Are You Sure You Wish To Delete The Survey?")"
-                  Action="Delete" Security="SecurityAccessLevel.Edit"
-                  Class="btn btn-danger"
-                  OnClick="@(async () => await DeleteSurvey())" />
-}
+<NavLink class="btn btn-secondary" href="@NavigateUrl()">Cancel</NavLink>
 @code {
     #region Control Definition
     // This control can only be reached by users with Edit permission
@@ -54,24 +47,10 @@
         try
         {
             Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
-
-            if (Survey == null)
-            {
-                Survey = new Survey();
-                Survey.SurveyId = -1; // So we kno wthis is a new Survey
-                Survey.ModuleId = ModuleState.ModuleId;
-                Survey.SurveyName = "New Survey";
-            }
         }
         catch (Exception ex)
         {
-            if (Survey == null)
-            {
-                Survey = new Survey();
-                Survey.SurveyId = -1;
-            }
-
-            await logger.LogError(ex, "Error Loading Survey {SurveyId} {Error}", Survey.SurveyId, ex.Message);
+            await logger.LogError(ex, "Error Loading Survey for {ModuleState.ModuleId} {Error}", ModuleState.ModuleId, ex.Message);
             AddModuleMessage("Error Loading Survey", MessageType.Error);
         }
     }
@@ -80,20 +59,8 @@
     {
         try
         {
-            if (Survey.SurveyId == -1)
-            {
-                // New Survey
-
-                Survey = await SurveyService.AddSurveyAsync(Survey);
-                await logger.LogInformation("Survey Added {Survey}", Survey);
-            }
-            else
-            {
-                // Update Survey
-
-                await SurveyService.UpdateSurveyAsync(Survey);
-                await logger.LogInformation("Survey Updated {Survey}", Survey);
-            }
+            await SurveyService.UpdateSurveyAsync(Survey);
+            await logger.LogInformation("Survey Updated {Survey}", Survey);
 
             // Get URL for Edit control
             string strEditURL = EditUrl("Edit");
@@ -102,21 +69,6 @@
         catch (Exception ex)
         {
             strError = ex.GetBaseException().Message;
-        }
-    }
-
-    private async Task DeleteSurvey()
-    {
-        try
-        {
-            await SurveyService.DeleteSurveyAsync(ModuleState.ModuleId);
-            await logger.LogInformation("Survey Deleted {Survey}", Survey);
-            NavigationManager.NavigateTo(NavigateUrl());
-        }
-        catch (Exception ex)
-        {
-            await logger.LogError(ex, "Error Deleting Survey {Survey} {Error}", Survey, ex.Message);
-            AddModuleMessage("Error Deleting Survey", MessageType.Error);
         }
     }
 }
