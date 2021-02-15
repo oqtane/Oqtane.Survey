@@ -163,7 +163,7 @@ namespace Oqtane.Survey.Repository
 
                 objSurveyItem.SurveyNavigation =
                     _db.OqtaneSurvey
-                    .Where(x => x.SurveyId == NewSurveyItem.SurveyId)
+                    .Where(x => x.ModuleId == NewSurveyItem.ModuleId)
                     .FirstOrDefault();
 
                 objSurveyItem.Id = 0;
@@ -184,7 +184,7 @@ namespace Oqtane.Survey.Repository
                 // Set position
                 int CountOfSurveyItems =
                     _db.OqtaneSurveyItem
-                    .Where(x => x.SurveyNavigation.SurveyId == NewSurveyItem.SurveyId)
+                    .Where(x => x.SurveyNavigation.ModuleId == NewSurveyItem.ModuleId)
                     .Count();
 
                 objSurveyItem.Position = CountOfSurveyItems;
