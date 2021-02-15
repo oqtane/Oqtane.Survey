@@ -20,6 +20,8 @@ namespace Oqtane.Survey.Models
     public class SurveyItem
     {
         public int Id { get; set; }
+        public int SurveyId { get; set; }
+        public int ModuleId { get; set; }
         public string ItemLabel { get; set; }
         public string ItemType { get; set; }
         public string ItemValue { get; set; }
@@ -46,6 +48,7 @@ namespace Oqtane.Survey.Models
     public class SurveyAnswer
     {
         public int Id { get; set; }
+        public int ModuleId { get; set; }
         public int SurveyItemId { get; set; }
         public string AnswerValue { get; set; }
         public DateTime AnswerValueDateTime { get; set; }

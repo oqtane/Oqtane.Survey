@@ -18,7 +18,7 @@ namespace Oqtane.Survey.Repository
             _db = context;
         }
 
-        // Survey
+        // Surveys
 
         #region public async Task<List<OqtaneSurvey>> GetAllSurveysAsync()
         public async Task<List<OqtaneSurvey>> GetAllSurveysAsync()
@@ -129,31 +129,31 @@ namespace Oqtane.Survey.Repository
         }
         #endregion
 
-        // Survey Item
+        // Survey Items
 
-        #region public async Task<List<OqtaneSurveyItem>> GetAllSurveyItemsAsync(int SurveyId)
-        public async Task<List<OqtaneSurveyItem>> GetAllSurveyItemsAsync(int SurveyId)
+        #region public List<OqtaneSurveyItem> GetAllSurveyItems(int ModuleId)
+        public List<OqtaneSurveyItem> GetAllSurveyItems(int ModuleId)
         {
-            return await _db.OqtaneSurveyItem
+            return _db.OqtaneSurveyItem
                 .AsNoTracking()
-                .Where(x => x.SurveyNavigation.SurveyId == SurveyId)
+                .Where(x => x.SurveyNavigation.ModuleId == ModuleId)
                 .OrderBy(x => x.Id)
-                .ToListAsync();
+                .ToList();
         }
         #endregion
 
-        #region public Task<OqtaneSurveyItem> GetSurveyItemAsync(int SurveyItemId)
-        public Task<OqtaneSurveyItem> GetSurveyItemAsync(int SurveyItemId)
+        #region public OqtaneSurveyItem GetSurveyItem(int SurveyItemId)
+        public OqtaneSurveyItem GetSurveyItem(int SurveyItemId)
         {
-            return Task.FromResult(_db.OqtaneSurveyItem
+            return _db.OqtaneSurveyItem
                 .Where(x => x.Id == SurveyItemId)
                 .Include(x => x.OqtaneSurveyItemOption)
-                .FirstOrDefault());
+                .FirstOrDefault();
         }
         #endregion
 
-        #region public Task<OqtaneSurveyItem> CreateSurveyItemAsync(OqtaneSurveyItem NewSurveyItem)
-        public Task<OqtaneSurveyItem> CreateSurveyItemAsync(OqtaneSurveyItem NewSurveyItem)
+        #region public OqtaneSurveyItem CreateSurveyItem(Models.SurveyItem NewSurveyItem)
+        public OqtaneSurveyItem CreateSurveyItem(Models.SurveyItem NewSurveyItem)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace Oqtane.Survey.Repository
 
                 objSurveyItem.SurveyNavigation =
                     _db.OqtaneSurvey
-                    .Where(x => x.SurveyId == NewSurveyItem.SurveyNavigation.SurveyId)
+                    .Where(x => x.SurveyId == NewSurveyItem.SurveyId)
                     .FirstOrDefault();
 
                 objSurveyItem.Id = 0;
@@ -173,9 +173,9 @@ namespace Oqtane.Survey.Repository
                 objSurveyItem.Required = NewSurveyItem.Required;
                 objSurveyItem.Position = 0;
 
-                if (NewSurveyItem.OqtaneSurveyItemOption != null)
+                if (NewSurveyItem.SurveyItemOption != null)
                 {
-                    objSurveyItem.OqtaneSurveyItemOption = NewSurveyItem.OqtaneSurveyItemOption;
+                    objSurveyItem.OqtaneSurveyItemOption = ConvertToOqtaneSurveyItems(NewSurveyItem.SurveyItemOption);
                 }
 
                 _db.OqtaneSurveyItem.Add(objSurveyItem);
@@ -184,13 +184,13 @@ namespace Oqtane.Survey.Repository
                 // Set position
                 int CountOfSurveyItems =
                     _db.OqtaneSurveyItem
-                    .Where(x => x.SurveyNavigation.SurveyId == NewSurveyItem.SurveyNavigation.SurveyId)
+                    .Where(x => x.SurveyNavigation.SurveyId == NewSurveyItem.SurveyId)
                     .Count();
 
                 objSurveyItem.Position = CountOfSurveyItems;
                 _db.SaveChanges();
 
-                return Task.FromResult(objSurveyItem);
+                return objSurveyItem;
             }
             catch
             {
@@ -200,8 +200,8 @@ namespace Oqtane.Survey.Repository
         }
         #endregion
 
-        #region public Task<OqtaneSurveyItem> UpdateSurveyItemAsync(OqtaneSurveyItem objExistingSurveyItem)
-        public Task<OqtaneSurveyItem> UpdateSurveyItemAsync(OqtaneSurveyItem objExistingSurveyItem)
+        #region public OqtaneSurveyItem UpdateSurveyItem(Models.SurveyItem objExistingSurveyItem)
+        public OqtaneSurveyItem UpdateSurveyItem(Models.SurveyItem objExistingSurveyItem)
         {
             try
             {
@@ -215,11 +215,11 @@ namespace Oqtane.Survey.Repository
                 ExistingSurveyItem.ItemValue = objExistingSurveyItem.ItemValue;
                 ExistingSurveyItem.Required = objExistingSurveyItem.Required;
 
-                ExistingSurveyItem.OqtaneSurveyItemOption = objExistingSurveyItem.OqtaneSurveyItemOption;
+                ExistingSurveyItem.OqtaneSurveyItemOption = ConvertToOqtaneSurveyItems(objExistingSurveyItem.SurveyItemOption);
 
                 _db.SaveChanges();
 
-                return Task.FromResult(ExistingSurveyItem);
+                return ExistingSurveyItem;
             }
             catch
             {
@@ -229,12 +229,12 @@ namespace Oqtane.Survey.Repository
         }
         #endregion
 
-        #region public Task<bool> DeleteSurveyItemAsync(SurveyItem objExistingSurveyItem)
-        public Task<bool> DeleteSurveyItemAsync(SurveyItem objExistingSurveyItem)
+        #region public bool DeleteSurveyItem(int Id)
+        public bool DeleteSurveyItem(int Id)
         {
             var ExistingSurveyItem =
                 _db.OqtaneSurveyItem
-                .Where(x => x.Id == objExistingSurveyItem.Id)
+                .Where(x => x.Id == Id)
                 .FirstOrDefault();
 
             if (ExistingSurveyItem != null)
@@ -244,10 +244,10 @@ namespace Oqtane.Survey.Repository
             }
             else
             {
-                return Task.FromResult(false);
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
         }
         #endregion
 
@@ -339,6 +339,42 @@ namespace Oqtane.Survey.Repository
                 .ToList();
             foreach (var entry in changedEntriesCopy)
                 entry.State = EntityState.Detached;
+        }
+        #endregion
+
+        #region private List<OqtaneSurveyItemOption> ConvertToOqtaneSurveyItems(IEnumerable<Models.SurveyItemOption> colSurveyItemOptions)
+        private List<OqtaneSurveyItemOption> ConvertToOqtaneSurveyItems(IEnumerable<Models.SurveyItemOption> colSurveyItemOptions)
+        {
+            List<OqtaneSurveyItemOption> colOqtaneSurveyItemOptionCollection = new List<OqtaneSurveyItemOption>();
+
+            foreach (var objSurveyItemOption in colSurveyItemOptions)
+            {
+                // Convert to OqtaneSurveyItemOption
+                OqtaneSurveyItemOption objAddOqtaneSurveyItemOption = ConvertToOqtaneSurveyItemOption(objSurveyItemOption);
+
+                // Add to Collection
+                colOqtaneSurveyItemOptionCollection.Add(objAddOqtaneSurveyItemOption);
+            }
+
+            return colOqtaneSurveyItemOptionCollection;
+        }
+        #endregion
+
+        #region private OqtaneSurveyItemOption ConvertToOqtaneSurveyItemOption(SurveyItemOption objSurveyItemOption)
+        private OqtaneSurveyItemOption ConvertToOqtaneSurveyItemOption(SurveyItemOption objSurveyItemOption)
+        {
+            if (objSurveyItemOption == null)
+            {
+                return new OqtaneSurveyItemOption();
+            }
+
+            // Create new Object
+            OqtaneSurveyItemOption objOqtaneSurveyItemOption = new OqtaneSurveyItemOption();
+
+            objOqtaneSurveyItemOption.Id = objSurveyItemOption.Id;
+            objOqtaneSurveyItemOption.OptionLabel = objSurveyItemOption.OptionLabel;
+
+            return objOqtaneSurveyItemOption;
         }
         #endregion
     }
