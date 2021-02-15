@@ -24,21 +24,27 @@
     <div class="row">
         <div class="col-md-6">
             <div><b>Type</b></div>
-            <RadzenDropDown AllowClear="true" TValue="string"
-                            Data="@FormTypes"
-                            @bind-Value="SelectedSurveyItem.ItemType" />
+            <RadzenRadioButtonList @bind-Value=@SurveyTypeValue TValue="int">
+                <Items>
+                    <RadzenRadioButtonListItem Text="Text Box" Value="1" />
+                    <RadzenRadioButtonListItem Text="Text Area" Value="2" />
+                    <RadzenRadioButtonListItem Text="Date" Value="3" />
+                    <RadzenRadioButtonListItem Text="Date Time" Value="4" />
+                    <RadzenRadioButtonListItem Text="Dropdown" Value="5" />
+                    <RadzenRadioButtonListItem Text="Multi-Select Dropdown" Value="6" />
+                </Items>
+            </RadzenRadioButtonList>
         </div>
         <div class="col-md-6">
             <div><b>Required</b></div>
             <RadzenCheckBox @bind-Value="boolRequired"
                             Style="margin-bottom: 20px" TValue="bool" />
-
         </div>
     </div>
+    <br />
     <div class="row">
         <div class="col-md-12">
-            @if ((SelectedSurveyItem.ItemType == "Dropdown")
-           || (SelectedSurveyItem.ItemType == "Multi-Select Dropdown"))
+            @if ((SurveyTypeValue == 5) || (SurveyTypeValue == 6))
             {
                 <RadzenButton Click="OpenPopup"
                               Text="Edit Options"
@@ -111,7 +117,7 @@
     public override string Title => "Edit Survey Item";
 
     public override List<Resource> Resources => new List<Resource>()
-{
+    {
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
     #endregion
@@ -123,10 +129,8 @@
     bool ShowPopup = false;
     bool boolRequired = false;
 
-    IEnumerable<string> FormTypes = new string[]
-    { "Text Box", "Text Area", "Date", "Date Time", "Dropdown", "Multi-Select Dropdown" };
-
     private string newOption;
+    int SurveyTypeValue = 1;
 
     protected override async Task OnInitializedAsync()
     {
@@ -160,34 +164,61 @@
 
     async Task UpdateSurveyItem()
     {
-        //try
-        //{
-        //    if(boolRequired)
-        //    {
-        //        SelectedSurveyItem.Required = 1;
-        //    }
-        //    else
-        //    {
-        //        SelectedSurveyItem.Required = 0;
-        //    }
+        try
+        {
+            if (boolRequired)
+            {
+                SelectedSurveyItem.Required = 1;
+            }
+            else
+            {
+                SelectedSurveyItem.Required = 0;
+            }
 
-        //    if (SelectedSurveyItem.Id == -1)
-        //    {
-        //        SelectedSurveyItem =
-        //            await @Service.CreateSurveyItemAsync(SelectedSurveyItem);
-        //    }
-        //    else
-        //    {
-        //        SelectedSurveyItem =
-        //            await @Service.UpdateSurveyItemAsync(SelectedSurveyItem);
-        //    }
+            switch (SurveyTypeValue)
+            {
+                case 1:
+                    SelectedSurveyItem.ItemType = "Text Box";
+                    break;
+                case 2:
+                    SelectedSurveyItem.ItemType = "Text Area";
+                    break;
+                case 3:
+                    SelectedSurveyItem.ItemType = "Date";
+                    break;
+                case 4:
+                    SelectedSurveyItem.ItemType = "Date Time";
+                    break;
+                case 5:
+                    SelectedSurveyItem.ItemType = "Dropdown";
+                    break;
+                case 6:
+                    SelectedSurveyItem.ItemType = "Multi-Select Dropdown";
+                    break;
+                default:
+                    SelectedSurveyItem.ItemType = "Text Box";
+                    break;
+            }
 
-        //    dialogService.Close(SelectedSurveyItem);
-        //}
-        //catch (Exception ex)
-        //{
-        //    strError = ex.GetBaseException().Message;
-        //}
+            if (SelectedSurveyItem.Id == -1)
+            {
+                await SurveyItemService.AddSurveyItemAsync(SelectedSurveyItem);
+                await logger.LogInformation("Survey Added {SurveyItem}", SelectedSurveyItem);
+            }
+            else
+            {
+                await SurveyItemService.UpdateSurveyItemAsync(SelectedSurveyItem);
+                await logger.LogInformation("Survey Updated {SurveyItem}", SelectedSurveyItem);
+            }
+
+            // Get URL for Edit control
+            string strEditURL = EditUrl("Edit");
+            NavigationManager.NavigateTo(strEditURL);
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error in UpdateSurveyItem {Error}", ex.Message);
+        }
     }
 
     void OpenPopup()
