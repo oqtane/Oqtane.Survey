@@ -21,7 +21,9 @@
 <RadzenButton Click="UpdateSurvey"
               Text="Save" ButtonStyle="ButtonStyle.Success"
               Style="margin-bottom: 10px; width: 150px" />
-<NavLink class="btn btn-secondary" href="@NavigateUrl()">Cancel</NavLink>
+<RadzenButton Click="Cancel"
+              Text="Cancel" ButtonStyle="ButtonStyle.Light"
+              Style="margin-bottom: 10px; width: 150px" />
 @code {
     #region Control Definition
     // This control can only be reached by users with Edit permission
@@ -34,7 +36,7 @@
     public override string Title => "Edit Survey";
 
     public override List<Resource> Resources => new List<Resource>()
-    {
+{
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
     #endregion
@@ -68,7 +70,14 @@
         }
         catch (Exception ex)
         {
-            strError = ex.GetBaseException().Message;
+            await logger.LogError(ex, "Error in UpdateSurvey {Error}", ex.Message);
         }
+    }
+
+    void Cancel()
+    {
+        // Get URL for Edit control
+        string strEditURL = EditUrl("Edit");
+        NavigationManager.NavigateTo(strEditURL);
     }
 }

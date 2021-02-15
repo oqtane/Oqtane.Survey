@@ -51,6 +51,9 @@
 <RadzenButton Click="UpdateSurveyItem"
               Text="Save" ButtonStyle="ButtonStyle.Success"
               Style="margin-bottom: 10px; width: 150px" />
+<RadzenButton Click="Cancel"
+              Text="Cancel" ButtonStyle="ButtonStyle.Light"
+              Style="margin-bottom: 10px; width: 150px" />
 @if (SelectedSurveyItem.Id > 0)
 {
     @*<RadzenButton Click="DeleteSurveyItemDialog"
@@ -225,6 +228,13 @@
 
         //dialogService.Close(SelectedSurveyItem);
         //dialogService.Close(SelectedSurveyItem);
+    }
+
+    void Cancel()
+    {
+        // Get URL for Edit control
+        string strEditURL = EditUrl("Edit");
+        NavigationManager.NavigateTo(strEditURL);
     }
 
     @*async Task DeleteSurveyItemDialog() =>
