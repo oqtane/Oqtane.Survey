@@ -14,6 +14,6 @@ namespace Oqtane.Survey.Services
 
         Task<Models.SurveyItem> UpdateSurveyItemAsync(Models.SurveyItem SurveyItem);
 
-        Task DeleteSurveyItemAsync(int ModuleId);
+        Task DeleteSurveyItemAsync(Models.SurveyItem SurveyItem);
     }
 }

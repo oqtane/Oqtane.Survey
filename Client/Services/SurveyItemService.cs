@@ -41,9 +41,9 @@ namespace Oqtane.Survey.Services
             return await PutJsonAsync<Models.SurveyItem>(CreateAuthorizationPolicyUrl($"{Apiurl}/{SurveyItem.ModuleId}", SurveyItem.ModuleId), SurveyItem);
         }
 
-        public async Task DeleteSurveyItemAsync(int ModuleId)
+        public async Task DeleteSurveyItemAsync(Models.SurveyItem SurveyItem)
         {
-            await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{ModuleId}", ModuleId));
+            await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{SurveyItem.Id}", SurveyItem.ModuleId));
         }
     }
 }

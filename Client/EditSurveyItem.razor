@@ -60,50 +60,55 @@
 <RadzenButton Click="Cancel"
               Text="Cancel" ButtonStyle="ButtonStyle.Light"
               Style="margin-bottom: 10px; width: 150px" />
-@if (SelectedSurveyItem.Id > 0)
+@if (SelectedSurveyItem != null)
 {
-    @*<RadzenButton Click="DeleteSurveyItemDialog"
-        ButtonStyle="ButtonStyle.Danger"
-        Text="Delete"
-        Style="margin-bottom: 10px; width: 150px" />*@
-}
-@if (ShowPopup)
-{
-    <div class="modal" tabindex="-1" style="display:block;background-color:gainsboro" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Edit Options</h3>
-                </div>
-                <div class="modal-body">
-                    <ul style="list-style-type:none;">
-                        @foreach (var option in SelectedSurveyItem.SurveyItemOption.OrderBy(x => x.Id))
-                        {
-                            <li>
-                                <div Style="margin-bottom: 10px; width: 150px">
-                                    <RadzenButton Click="(() => RemoveOption(option))"
-                                                  Icon="delete"
-                                                  Size="Radzen.ButtonSize.Small"
-                                                  ButtonStyle="ButtonStyle.Danger" />
-                                    <b>@option.OptionLabel</b>
-                                </div>
-                            </li>
-                        }
-                    </ul>
-                    <RadzenTextBox @bind-Value="newOption"
-                                   Style="width: 200px" />
-                    <RadzenButton Click="AddOption"
-                                  Text="Add"
-                                  Size="Radzen.ButtonSize.Small"
-                                  ButtonStyle="ButtonStyle.Success" />
-                    <RadzenButton Click="ClosePopup"
-                                  Text="Close"
-                                  Size="Radzen.ButtonSize.Small"
-                                  ButtonStyle="ButtonStyle.Secondary" />
+    @if (SelectedSurveyItem.Id > 0)
+    {
+        <ActionDialog Header="Delete Item"
+                      Message="@("Are You Sure You Wish To Delete The Survey Item?")"
+                      Action="Delete" Security="SecurityAccessLevel.Edit"
+                      Class="btn btn-danger"
+                      OnClick="@(async () => await DeleteSurveyItem())" />
+    }
+
+    @if (ShowPopup)
+    {
+        <div class="modal" tabindex="-1" style="display:block;background-color:gainsboro" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Edit Options</h3>
+                    </div>
+                    <div class="modal-body">
+                        <ul style="list-style-type:none;">
+                            @foreach (var option in SelectedSurveyItem.SurveyItemOption.OrderBy(x => x.Id))
+                            {
+                                <li>
+                                    <div Style="margin-bottom: 10px; width: 150px">
+                                        <RadzenButton Click="(() => RemoveOption(option))"
+                                                      Icon="delete"
+                                                      Size="Radzen.ButtonSize.Small"
+                                                      ButtonStyle="ButtonStyle.Danger" />
+                                        <b>@option.OptionLabel</b>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                        <RadzenTextBox @bind-Value="newOption"
+                                       Style="width: 200px" />
+                        <RadzenButton Click="AddOption"
+                                      Text="Add"
+                                      Size="Radzen.ButtonSize.Small"
+                                      ButtonStyle="ButtonStyle.Success" />
+                        <RadzenButton Click="ClosePopup"
+                                      Text="Close"
+                                      Size="Radzen.ButtonSize.Small"
+                                      ButtonStyle="ButtonStyle.Secondary" />
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
 @code {
     #region Control Definition
@@ -117,7 +122,7 @@
     public override string Title => "Edit Survey Item";
 
     public override List<Resource> Resources => new List<Resource>()
-    {
+{
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
     };
     #endregion
@@ -143,6 +148,11 @@
                 if (_id > -1)
                 {
                     SelectedSurveyItem = await SurveyItemService.GetSurveyItemAsync(_id);
+
+                    if(SelectedSurveyItem == null)
+                    {
+                        AddModuleMessage("Error Loading Survey", MessageType.Error);
+                    }
                 }
                 else
                 {
@@ -203,12 +213,12 @@
             if (SelectedSurveyItem.Id == -1)
             {
                 await SurveyItemService.AddSurveyItemAsync(SelectedSurveyItem);
-                await logger.LogInformation("Survey Added {SurveyItem}", SelectedSurveyItem);
+                await logger.LogInformation("Survey Item Added {SurveyItem}", SelectedSurveyItem);
             }
             else
             {
                 await SurveyItemService.UpdateSurveyItemAsync(SelectedSurveyItem);
-                await logger.LogInformation("Survey Updated {SurveyItem}", SelectedSurveyItem);
+                await logger.LogInformation("Survey Item Updated {SurveyItem}", SelectedSurveyItem);
             }
 
             // Get URL for Edit control
@@ -252,13 +262,12 @@
 
     async Task DeleteSurveyItem()
     {
-        //var result = await @Service.DeleteSurveyItemAsync(SelectedSurveyItem);
+        await SurveyItemService.DeleteSurveyItemAsync(SelectedSurveyItem);
+        await logger.LogInformation("Survey Item Deleted {SurveyItem}", SelectedSurveyItem);
 
-        //// Set the Id to -1 so we know it is deleted
-        //SelectedSurveyItem.Id = -1;
-
-        //dialogService.Close(SelectedSurveyItem);
-        //dialogService.Close(SelectedSurveyItem);
+        // Get URL for Edit control
+        string strEditURL = EditUrl("Edit");
+        NavigationManager.NavigateTo(strEditURL);
     }
 
     void Cancel()
@@ -267,19 +276,4 @@
         string strEditURL = EditUrl("Edit");
         NavigationManager.NavigateTo(strEditURL);
     }
-
-    @*async Task DeleteSurveyItemDialog() =>
-            await dialogService.OpenAsync("Delete Survey Item", ds =>
-        @<RadzenCard Style="padding: 20px;">
-            <p Style="margin-bottom: 10px;">Confirm?</p>
-            <div class="row">
-                <div class="col-md-12">
-                    <RadzenButton Text="Yes" Click="DeleteSurveyItem"
-                                  Style="margin-bottom: 10px; width: 150px" />
-                    <RadzenButton Text="No" Click="()=> ds.Close(false)"
-                                  ButtonStyle="ButtonStyle.Secondary"
-                                  Style="margin-bottom: 10px; width: 150px" />
-                </div>
-            </div>
-        </RadzenCard>);*@
 }

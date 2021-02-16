@@ -51,11 +51,6 @@ namespace Oqtane.Survey.Controllers
 
             Models.SurveyItem SurveyItem = ConvertToSurveyItem(objSurvey);
 
-            if (SurveyItem != null && SurveyItem.ModuleId != _entityId)
-            {
-                SurveyItem = null;
-            }
-
             return SurveyItem;
         }
 
