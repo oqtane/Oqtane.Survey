@@ -149,7 +149,34 @@
                 {
                     SelectedSurveyItem = await SurveyItemService.GetSurveyItemAsync(_id);
 
-                    if(SelectedSurveyItem == null)
+                    boolRequired = (SelectedSurveyItem.Required == 1);
+
+                    switch (SelectedSurveyItem.ItemType)
+                    {
+                        case "Text Box":
+                            SurveyTypeValue = 1;
+                            break;
+                        case "Text Area":
+                            SurveyTypeValue = 2;
+                            break;
+                        case "Date":
+                            SurveyTypeValue = 3;
+                            break;
+                        case "Date Time":
+                            SurveyTypeValue = 4;
+                            break;
+                        case "Dropdown":
+                            SurveyTypeValue = 5;
+                            break;
+                        case "Multi-Select Dropdown":
+                            SurveyTypeValue = 6;
+                            break;
+                        default:
+                            SurveyTypeValue = 1;
+                            break;
+                    }
+
+                    if (SelectedSurveyItem == null)
                     {
                         AddModuleMessage("Error Loading Survey", MessageType.Error);
                     }
