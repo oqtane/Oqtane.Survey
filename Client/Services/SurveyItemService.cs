@@ -38,12 +38,12 @@ namespace Oqtane.Survey.Services
 
         public async Task<Models.SurveyItem> UpdateSurveyItemAsync(Models.SurveyItem SurveyItem)
         {
-            return await PutJsonAsync<Models.SurveyItem>(CreateAuthorizationPolicyUrl($"{Apiurl}/{SurveyItem.ModuleId}", SurveyItem.ModuleId), SurveyItem);
+            return await PutJsonAsync<Models.SurveyItem>(CreateAuthorizationPolicyUrl($"{Apiurl}/{SurveyItem.Id}", SurveyItem.Id), SurveyItem);
         }
 
         public async Task DeleteSurveyItemAsync(Models.SurveyItem SurveyItem)
         {
-            await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{SurveyItem.Id}", SurveyItem.ModuleId));
+            await DeleteAsync(CreateAuthorizationPolicyUrl($"{Apiurl}/{SurveyItem.Id}", SurveyItem.Id));
         }
     }
 }

@@ -72,7 +72,7 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public Models.SurveyItem Put(int id, [FromBody] Models.SurveyItem SurveyItem)
         {
-            if (ModelState.IsValid && SurveyItem.ModuleId == _entityId)
+            if (ModelState.IsValid && SurveyItem.Id == _entityId)
             {
                 SurveyItem = ConvertToSurveyItem(_SurveyRepository.UpdateSurveyItem(SurveyItem));
                 _logger.Log(LogLevel.Information, this, LogFunction.Update, "SurveyItem Updated {SurveyItem}", SurveyItem);
@@ -89,7 +89,7 @@ namespace Oqtane.Survey.Controllers
 
             Models.SurveyItem SurveyItem = ConvertToSurveyItem(objSurveyItem);
 
-            if (SurveyItem != null && SurveyItem.ModuleId == _entityId)
+            if (SurveyItem != null && SurveyItem.Id == _entityId)
             {
                 bool boolResult = _SurveyRepository.DeleteSurveyItem(id);
                 if (boolResult)
