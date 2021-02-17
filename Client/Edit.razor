@@ -145,8 +145,10 @@
 
     async Task SelectedSurveyMoveUp(object value)
     {
-        //SurveyItem objSurveyItem = (SurveyItem)value;
-        //int DesiredPosition = (objSurveyItem.Position - 1);
+        SurveyItem objSurveyItem = (SurveyItem)value;
+
+        await SurveyItemService.MoveSurveyItemAsync("Up", objSurveyItem);
+        await logger.LogInformation("Survey Item moved up {SurveyItem}", objSurveyItem);
 
         //// Move the current element in that position
         //var CurrentSurveyItem =
@@ -184,8 +186,10 @@
 
     async Task SelectedSurveyMoveDown(object value)
     {
-        //SurveyItem objSurveyItem = (SurveyItem)value;
-        //int DesiredPosition = (objSurveyItem.Position + 1);
+        SurveyItem objSurveyItem = (SurveyItem)value;
+
+        await SurveyItemService.MoveSurveyItemAsync("Down", objSurveyItem);
+        await logger.LogInformation("Survey Item moved down {SurveyItem}", objSurveyItem);
 
         //// Move the current element in that position
         //var CurrentSurveyItem =

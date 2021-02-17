@@ -12,6 +12,8 @@ namespace Oqtane.Survey.Services
 
         Task<Models.SurveyItem> AddSurveyItemAsync(Models.SurveyItem SurveyItem);
 
+        Task<Models.SurveyItem> MoveSurveyItemAsync(string MoveType, Models.SurveyItem SurveyItem);
+
         Task<Models.SurveyItem> UpdateSurveyItemAsync(Models.SurveyItem SurveyItem);
 
         Task DeleteSurveyItemAsync(Models.SurveyItem SurveyItem);

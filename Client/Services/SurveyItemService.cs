@@ -35,6 +35,10 @@ namespace Oqtane.Survey.Services
         {
             return await PostJsonAsync<Models.SurveyItem>(CreateAuthorizationPolicyUrl($"{Apiurl}", SurveyItem.ModuleId), SurveyItem);
         }
+        public async Task<Models.SurveyItem> MoveSurveyItemAsync(string MoveType, Models.SurveyItem SurveyItem)
+        {
+            return await PostJsonAsync<Models.SurveyItem>(CreateAuthorizationPolicyUrl($"{Apiurl}/{MoveType}", SurveyItem.ModuleId), SurveyItem);
+        }
 
         public async Task<Models.SurveyItem> UpdateSurveyItemAsync(Models.SurveyItem SurveyItem)
         {
