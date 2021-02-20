@@ -37,7 +37,6 @@ namespace Oqtane.Survey.Services
         }
         public async Task<Models.SurveyItem> MoveSurveyItemAsync(string MoveType, Models.SurveyItem SurveyItem)
         {
-            //  *** Don't try to do a POST it tries to create - MOVE TO A NEW CONTROLLER
             return await PostJsonAsync<Models.SurveyItem>(CreateAuthorizationPolicyUrl($"{Apiurl}/{MoveType}", SurveyItem.Id), SurveyItem);
         }
 
