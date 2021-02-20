@@ -9,7 +9,7 @@ using Oqtane.Survey.Models;
 using Oqtane.Survey.Repository;
 using Oqtane.Repository;
 using Oqtane.Survey.Server.Repository;
-using System;
+using System.Linq;
 
 namespace Oqtane.Survey.Controllers
 {
@@ -74,8 +74,81 @@ namespace Oqtane.Survey.Controllers
         {
             if (ModelState.IsValid && SurveyItem.Id == _entityId)
             {
-               // SurveyItem = ConvertToSurveyItem(_SurveyRepository.CreateSurveyItem(SurveyItem));
-                _logger.Log(LogLevel.Information, this, LogFunction.Create, "SurveyItem {SurveyItem} moved {MoveType}", SurveyItem);
+                // Get the Survey (and all SurveyItems)
+                var objSurvey = _SurveyRepository.GetSurvey(SurveyItem.ModuleId);
+
+                if (MoveType == "Up")
+                {
+                    // Move Up
+                    int DesiredPosition = (SurveyItem.Position - 1);
+
+                    // Move the current element in that position
+                    var CurrentSurveyItem =
+                            objSurvey.OqtaneSurveyItem
+                            .Where(x => x.Position == DesiredPosition)
+                            .FirstOrDefault();
+
+                    if (CurrentSurveyItem != null)
+                    {
+                        // Move it down
+                        CurrentSurveyItem.Position = CurrentSurveyItem.Position + 1;
+
+                        // Update it
+                        _SurveyRepository.UpdateSurveyItem(ConvertToSurveyItem(CurrentSurveyItem));
+                    }
+
+                    // Move Item Up
+                    var SurveyItemToMoveUp =
+                         objSurvey.OqtaneSurveyItem
+                            .Where(x => x.Id == SurveyItem.Id)
+                            .FirstOrDefault();
+
+                    if (SurveyItemToMoveUp != null)
+                    {
+                        // Move it up
+                        SurveyItemToMoveUp.Position = SurveyItemToMoveUp.Position - 1;
+
+                        // Update it
+                        _SurveyRepository.UpdateSurveyItem(ConvertToSurveyItem(SurveyItemToMoveUp));
+                    }
+                }
+                else
+                {
+                    // Move Down
+
+                    //// Move the current element in that position
+                    //var CurrentSurveyItem =
+                    //    await @Service.GetSurveyItemAsync(
+                    //        SelectedSurvey.SurveyItem
+                    //        .Where(x => x.Position == DesiredPosition)
+                    //        .FirstOrDefault().Id);
+
+                    //if (CurrentSurveyItem != null)
+                    //{
+                    //    // Move it up
+                    //    CurrentSurveyItem.Position = CurrentSurveyItem.Position - 1;
+                    //    // Update it
+                    //    await Service.UpdateSurveyItemAsync(CurrentSurveyItem);
+                    //}
+
+                    //// Move Item Down
+                    //var SurveyItemToMoveDown =
+                    //    await @Service.GetSurveyItemAsync(
+                    //        SelectedSurvey.SurveyItem
+                    //        .Where(x => x.Id == objSurveyItem.Id)
+                    //        .FirstOrDefault().Id);
+
+                    //if (SurveyItemToMoveDown != null)
+                    //{
+                    //    // Move it up
+                    //    SurveyItemToMoveDown.Position = SurveyItemToMoveDown.Position + 1;
+                    //    // Update it
+                    //    await Service.UpdateSurveyItemAsync(SurveyItemToMoveDown);
+                    //}
+
+                }
+
+                _logger.Log(LogLevel.Information, this, LogFunction.Create, "SurveyItem {SurveyItem} moved", SurveyItem);
             }
             return SurveyItem;
         }

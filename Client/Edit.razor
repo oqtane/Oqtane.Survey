@@ -146,83 +146,25 @@
     async Task SelectedSurveyMoveUp(object value)
     {
         SurveyItem objSurveyItem = (SurveyItem)value;
+        objSurveyItem.ModuleId = ModuleState.ModuleId;
 
         await SurveyItemService.MoveSurveyItemAsync("Up", objSurveyItem);
         await logger.LogInformation("Survey Item moved up {SurveyItem}", objSurveyItem);
 
-        //// Move the current element in that position
-        //var CurrentSurveyItem =
-        //    await @Service.GetSurveyItemAsync(
-        //        SelectedSurvey.SurveyItem
-        //        .Where(x => x.Position == DesiredPosition)
-        //        .FirstOrDefault().Id);
-
-        //if (CurrentSurveyItem != null)
-        //{
-        //    // Move it down
-        //    CurrentSurveyItem.Position = CurrentSurveyItem.Position + 1;
-        //    // Update it
-        //    await Service.UpdateSurveyItemAsync(CurrentSurveyItem);
-        //}
-
-        //// Move Item Up
-        //var SurveyItemToMoveUp =
-        //    await @Service.GetSurveyItemAsync(
-        //        SelectedSurvey.SurveyItem
-        //        .Where(x => x.Id == objSurveyItem.Id)
-        //        .FirstOrDefault().Id);
-
-        //if (SurveyItemToMoveUp != null)
-        //{
-        //    // Move it up
-        //    SurveyItemToMoveUp.Position = SurveyItemToMoveUp.Position - 1;
-        //    // Update it
-        //    await Service.UpdateSurveyItemAsync(SurveyItemToMoveUp);
-        //}
-
-        //// Refresh SelectedSurvey
-        //SelectedSurvey = await @Service.GetSurvey(SelectedSurvey.Id);
+        // Refresh Survey
+        Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
     }
 
     async Task SelectedSurveyMoveDown(object value)
     {
         SurveyItem objSurveyItem = (SurveyItem)value;
+        objSurveyItem.ModuleId = ModuleState.ModuleId;
 
         await SurveyItemService.MoveSurveyItemAsync("Down", objSurveyItem);
         await logger.LogInformation("Survey Item moved down {SurveyItem}", objSurveyItem);
 
-        //// Move the current element in that position
-        //var CurrentSurveyItem =
-        //    await @Service.GetSurveyItemAsync(
-        //        SelectedSurvey.SurveyItem
-        //        .Where(x => x.Position == DesiredPosition)
-        //        .FirstOrDefault().Id);
-
-        //if (CurrentSurveyItem != null)
-        //{
-        //    // Move it up
-        //    CurrentSurveyItem.Position = CurrentSurveyItem.Position - 1;
-        //    // Update it
-        //    await Service.UpdateSurveyItemAsync(CurrentSurveyItem);
-        //}
-
-        //// Move Item Down
-        //var SurveyItemToMoveDown =
-        //    await @Service.GetSurveyItemAsync(
-        //        SelectedSurvey.SurveyItem
-        //        .Where(x => x.Id == objSurveyItem.Id)
-        //        .FirstOrDefault().Id);
-
-        //if (SurveyItemToMoveDown != null)
-        //{
-        //    // Move it up
-        //    SurveyItemToMoveDown.Position = SurveyItemToMoveDown.Position + 1;
-        //    // Update it
-        //    await Service.UpdateSurveyItemAsync(SurveyItemToMoveDown);
-        //}
-
-        //// Refresh SelectedSurvey
-        //await RefreshSurvey(SelectedSurvey.Id);
+        // Refresh Survey
+        Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
     }
 
     #region private async Task Save()
