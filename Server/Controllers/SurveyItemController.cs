@@ -67,12 +67,12 @@ namespace Oqtane.Survey.Controllers
             return SurveyItem;
         }
 
-        // POST api/<controller>/5
-        [HttpPost]
+        // POST api/<controller>/Down
+        [HttpPost("{id}")]
         [Authorize(Policy = PolicyNames.EditModule)]
         public Models.SurveyItem Post(string MoveType, [FromBody] Models.SurveyItem SurveyItem)
         {
-            if (ModelState.IsValid && SurveyItem.ModuleId == _entityId)
+            if (ModelState.IsValid && SurveyItem.Id == _entityId)
             {
                 SurveyItem = ConvertToSurveyItem(_SurveyRepository.CreateSurveyItem(SurveyItem));
                 _logger.Log(LogLevel.Information, this, LogFunction.Create, "SurveyItem {SurveyItem} moved {MoveType}", SurveyItem);

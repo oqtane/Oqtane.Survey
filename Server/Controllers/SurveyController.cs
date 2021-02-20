@@ -102,14 +102,33 @@ namespace Oqtane.Survey.Controllers
 
             if (Survey != null && Survey.ModuleId == _entityId)
             {
+                // Delete all Survey Items
+                if (Survey.SurveyItem != null)
+                {
+                    foreach (var item in Survey.SurveyItem)
+                    {
+                        bool boolDeleteSurveyItemResult = _SurveyRepository.DeleteSurveyItem(item.Id);
+
+                        if (boolDeleteSurveyItemResult)
+                        {
+                            _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Survey Item Deleted {item.Id}", item.Id);
+                        }
+                        else
+                        {
+                            _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Error: Survey Item *NOT* Deleted {item.Id}", item.Id);
+                        }
+                    }
+                }
+
                 bool boolResult = _SurveyRepository.DeleteSurvey(id);
+
                 if (boolResult)
                 {
-                    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Survey Deleted {SurveyId}", id);
+                    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Survey Deleted {id}", id);
                 }
                 else
                 {
-                    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Error: Survey *NOT* Deleted {SurveyId}", id);
+                    _logger.Log(LogLevel.Information, this, LogFunction.Delete, "Error: Survey *NOT* Deleted {id}", id);
                 }
             }
         }
