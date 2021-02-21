@@ -16,6 +16,9 @@ An [Oqtane](https://github.com/oqtane/oqtane.framework) module that allows admin
   * Dropdown
   * Multi-Select Dropdown
 
+# Install
+In order to deploy/install a module you should modify the folder path in the debug.cmd and release.cmd files to match the location on your system where the Oqtane framework is installed. Then when you execute this file it will create a Nuget package and copy it to the specified location where the framework will automatically install it upon startup.
+
 # About Oqtane
 ![Oqtane](https://github.com/oqtane/framework/blob/master/oqtane.png?raw=true "Oqtane")
 
