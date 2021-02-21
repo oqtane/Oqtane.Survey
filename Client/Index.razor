@@ -1,34 +1,49 @@
 @using Oqtane.Survey.Services
 @using Oqtane.Survey.Models
+@using Microsoft.AspNetCore.Components.Authorization
 
 @namespace Oqtane.Survey
 @inherits ModuleBase
 @inject ISurveyService SurveyService
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<br />
 @if (_Survey != null)
 {
     <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
-            Text="Edit Survey" />
+                Text="Edit Survey" />
+    <br /><br />
 }
 else
 {
     <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
                 Text="Create Survey" />
+    <br />
+    <br />
 }
-<br />
-<br />
+
 @if (_Survey != null)
 {
     <div class="row">
         <div class="col-md-12">
-            <h4>Name: <b>@_Survey.SurveyName</b></h4>
+            <h5><b>@_Survey.SurveyName</b></h5>
         </div>
     </div>
 }
-
+@if (IsLoggedIn)
+{
+    <RadzenButton Text="Submit"
+                  ButtonStyle="ButtonStyle.Success"
+                  Size="Radzen.ButtonSize.Medium"
+                  Style="margin-top: 20px" />
+}
+else
+{
+    <p>You must be logged in to take this Survey</p>
+}
 @code {
+    public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Anonymous;
+
     public override List<Resource> Resources => new List<Resource>()
 {
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" },
@@ -36,11 +51,19 @@ else
     };
 
     Survey _Survey;
+    bool IsLoggedIn = false;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
+            // get user
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                IsLoggedIn = true;
+            }
+
             _Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
         }
         catch (Exception ex)
