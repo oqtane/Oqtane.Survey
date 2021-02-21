@@ -35,7 +35,7 @@ else
             <RadzenTabsItem Text="Survey">
                 @if (ShowSurveyComplete)
                 {
-                    <h4>Responses Saved - Survey Complete</h4>
+                    <b>Responses Saved - Survey Complete</b>
                 }
                 else
                 {
@@ -109,7 +109,7 @@ else
                         }
                         else
                         {
-                            <h4>You must <a href="MicrosoftIdentity/Account/SignIn">Log in</a> to take a Survey</h4>
+                            <b>You must be logged in to take this Survey</b>
                         }
                     </RadzenTemplateForm>
                 }
@@ -152,23 +152,13 @@ else
         </Tabs>
     </RadzenTabs>
 }
-@if (isAuthenticated)
-{
-    <RadzenButton Text="Submit"
-                  ButtonStyle="ButtonStyle.Success"
-                  Size="Radzen.ButtonSize.Medium"
-                  Style="margin-top: 20px" />
-}
-else
-{
-    <p>You must be logged in to take this Survey</p>
-}
+
 @code {
     #region Control Definition
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Anonymous;
 
     public override List<Resource> Resources => new List<Resource>()
-    {
+{
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" },
         new Resource { ResourceType = ResourceType.Script, Url = ModulePath() + "Module.js" }
     };
@@ -323,7 +313,7 @@ else
 
         //    if (ColAnswerResponse.Count > 10)
         //    {
-        //        // Only take top 10 
+        //        // Only take top 10
         //        NewDTOSurveyItem.AnswerResponses = ColAnswerResponse
         //            .OrderByDescending(x => x.Responses)
         //            .Take(10).ToList();
