@@ -5,6 +5,7 @@
 @namespace Oqtane.Survey
 @inherits ModuleBase
 @inject ISurveyService SurveyService
+@inject ISurveyAnswersService SurveyAnswersService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
@@ -164,7 +165,6 @@ else
     };
     #endregion
 
-    string strError = "";
     System.Security.Claims.ClaimsPrincipal user;
     bool isAuthenticated = false;
     int UserId = -1;
@@ -195,17 +195,17 @@ else
 
     async Task SaveSurvey()
     {
-        //try
-        //{
-        //    var result =
-        //            await @Service.CreateSurveyAnswersAsync(SelectedSurvey);
+        try
+        {
+            await SurveyAnswersService.CreateSurveyAnswersAsync(SelectedSurvey);
 
-        //    CompleteSurvey();
-        //}
-        //catch (Exception ex)
-        //{
-        //    strError = ex.GetBaseException().Message;
-        //}
+            CompleteSurvey();
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error in SaveSurvey {Error}", ex.Message);
+            AddModuleMessage("Error in SaveSurvey", MessageType.Error);
+        }
     }
 
     void CompleteSurvey()

@@ -18,6 +18,6 @@ namespace Oqtane.Survey.Repository
         OqtaneSurveyItem CreateSurveyItem(Models.SurveyItem NewSurveyItem);
         OqtaneSurveyItem UpdateSurveyItem(Models.SurveyItem objExistingSurveyItem);
         bool DeleteSurveyItem(int Id);
-        Task<bool> CreateSurveyAnswersAsync(Models.Survey paramDTOSurvey);
+        bool CreateSurveyAnswers(Models.Survey paramDTOSurvey);
     }
 }

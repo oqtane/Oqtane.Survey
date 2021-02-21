@@ -253,8 +253,8 @@ namespace Oqtane.Survey.Repository
 
         // Survey Answers
 
-        #region public Task<bool> CreateSurveyAnswersAsync(Models.Survey paramDTOSurvey)
-        public Task<bool> CreateSurveyAnswersAsync(Models.Survey paramDTOSurvey)
+        #region public bool CreateSurveyAnswers(Models.Survey paramDTOSurvey)
+        public bool CreateSurveyAnswers(Models.Survey paramDTOSurvey)
         {
             try
             {
@@ -310,7 +310,7 @@ namespace Oqtane.Survey.Repository
                     }
                 }
 
-                return Task.FromResult(true);
+                return true;
             }
             catch
             {
