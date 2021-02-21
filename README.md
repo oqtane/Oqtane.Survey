@@ -1,7 +1,7 @@
 # Oqtane Survey Module
 An [Oqtane](https://github.com/oqtane/oqtane.framework) module that allows administrators to create user surveys.
 # ** In Progress **
-![Image 36](https://user-images.githubusercontent.com/1857799/108003771-93cff380-6fa8-11eb-80c3-97ee3964566e.png)
+![Animation](https://user-images.githubusercontent.com/1857799/108630910-2d215e80-741c-11eb-91eb-8249195728fa.gif)
 
 ## Planned Features
 
@@ -15,6 +15,9 @@ An [Oqtane](https://github.com/oqtane/oqtane.framework) module that allows admin
   * Date Time
   * Dropdown
   * Multi-Select Dropdown
+
+# Install
+In order to deploy/install a module you should modify the folder path in the debug.cmd and release.cmd files to match the location on your system where the Oqtane framework is installed. Then when you execute this file it will create a Nuget package and copy it to the specified location where the framework will automatically install it upon startup.
 
 # About Oqtane
 ![Oqtane](https://github.com/oqtane/framework/blob/master/oqtane.png?raw=true "Oqtane")
