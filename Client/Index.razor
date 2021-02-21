@@ -8,11 +8,12 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-@if (_Survey != null)
+@if (SelectedSurvey != null)
 {
     <ActionLink Action="Edit" Security="SecurityAccessLevel.Edit"
                 Text="Edit Survey" />
-    <br /><br />
+    <br />
+    <br />
 }
 else
 {
@@ -22,15 +23,136 @@ else
     <br />
 }
 
-@if (_Survey != null)
+@if (SelectedSurvey != null)
 {
     <div class="row">
         <div class="col-md-12">
-            <h5><b>@_Survey.SurveyName</b></h5>
+            <h5><b>@SelectedSurvey.SurveyName</b></h5>
         </div>
     </div>
+    <RadzenTabs>
+        <Tabs>
+            <RadzenTabsItem Text="Survey">
+                @if (ShowSurveyComplete)
+                {
+                    <h4>Responses Saved - Survey Complete</h4>
+                }
+                else
+                {
+                    <RadzenTemplateForm TItem="Survey" Data="@SelectedSurvey" Submit="@SaveSurvey">
+                        <div>
+                            @foreach (var SurveyItem in SelectedSurvey.SurveyItem.OrderBy(x => x.Position))
+                            {
+                                <div class="row">
+                                    <div class="col-md-9" style="text-align: left;margin-bottom: 20px">
+                                        <b>@SurveyItem.ItemLabel</b>
+                                        <br />
+                                        @if (SurveyItem.ItemType == "Text Box")
+                                        {
+                                            <RadzenTextBox MaxLength="4000" Name="@SurveyItem.Id.ToString()"
+                                                           @bind-Value="@SurveyItem.AnswerValueString" />
+                                        }
+                                        @if (SurveyItem.ItemType == "Text Area")
+                                        {
+                                            <RadzenTextArea MaxLength="4000" Name="@SurveyItem.Id.ToString()"
+                                                            @bind-Value="@SurveyItem.AnswerValueString" />
+                                        }
+                                        @if (SurveyItem.ItemType == "Date")
+                                        {
+                                            <RadzenDatePicker DateFormat="d" Name="@SurveyItem.Id.ToString()"
+                                                              @bind-Value="@SurveyItem.AnswerValueDateTime"
+                                                              TValue="DateTime?" ShowTime="false" />
+                                        }
+                                        @if (SurveyItem.ItemType == "Date Time")
+                                        {
+                                            <RadzenDatePicker TValue="DateTime?" Name="@SurveyItem.Id.ToString()"
+                                                              @bind-Value="@SurveyItem.AnswerValueDateTime"
+                                                              ShowTime="true" />
+                                        }
+                                        @if (SurveyItem.ItemType == "Dropdown")
+                                        {
+                                            <RadzenDropDown AllowClear="true" TValue="string" Name="@SurveyItem.Id.ToString()"
+                                                            Data="@SurveyItem.SurveyItemOption.OrderBy(x => x.Id)"
+                                                            TextProperty="OptionLabel" ValueProperty="OptionLabel"
+                                                            @bind-Value="@SurveyItem.AnswerValueString"
+                                                            Style="width:300px;" />
+                                        }
+                                        @if (SurveyItem.ItemType == "Multi-Select Dropdown")
+                                        {
+                                            <RadzenDropDown Name="@SurveyItem.Id.ToString()"
+                                                            TValue="IEnumerable<string>"
+                                                            Multiple="true"
+                                                            AllowClear="true"
+                                                            AllowFiltering="true"
+                                                            @bind-Value="SurveyItem.AnswerValueList"
+                                                            Placeholder="Select..."
+                                                            Data="@SurveyItem.SurveyItemOption"
+                                                            TextProperty="OptionLabel"
+                                                            ValueProperty="OptionLabel"
+                                                            Style="width:300px;" />
+                                        }
+                                        @if (SurveyItem.Required == 1)
+                                        {
+                                            <br /><RadzenRequiredValidator Component="@SurveyItem.Id.ToString()"
+                                                                           Text="Required" Popup="false"
+                                                                           Style="position: absolute" />
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @if (isAuthenticated)
+                        {
+                            <div class="row">
+                                <RadzenButton ButtonType="ButtonType.Submit" Text="Submit"></RadzenButton>
+                            </div>
+                        }
+                        else
+                        {
+                            <h4>You must <a href="MicrosoftIdentity/Account/SignIn">Log in</a> to take a Survey</h4>
+                        }
+                    </RadzenTemplateForm>
+                }
+                @if (SelectedSurvey.SurveyItem.Count == 0)
+                {
+                    <h4>No Survey Items</h4>
+                }
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Responses">
+                <RadzenPanel AllowCollapse="false" Style="margin-bottom: 10px">
+                    <ChildContent>
+                        <RadzenDataList Count="@SurveyResultsCount"
+                                        Data="@SurveyResults"
+                                        LoadData="@LoadSurveyResultsData"
+                                        PageSize="1" WrapItems="true" AllowPaging="true"
+                                        TItem="SurveyItem">
+                            <Template Context="item">
+                                <RadzenCard Style="height:300px">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <RadzenChart>
+                                                <RadzenDonutSeries Data="@item.AnswerResponses"
+                                                                   CategoryProperty="OptionLabel"
+                                                                   ValueProperty="Responses">
+                                                    <TitleTemplate>
+                                                        <div class="rz-donut-content">
+                                                            <div>@item.ItemLabel</div>
+                                                        </div>
+                                                    </TitleTemplate>
+                                                </RadzenDonutSeries>
+                                            </RadzenChart>
+                                        </div>
+                                    </div>
+                                </RadzenCard>
+                            </Template>
+                        </RadzenDataList>
+                    </ChildContent>
+                </RadzenPanel>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
 }
-@if (IsLoggedIn)
+@if (isAuthenticated)
 {
     <RadzenButton Text="Submit"
                   ButtonStyle="ButtonStyle.Success"
@@ -42,16 +164,24 @@ else
     <p>You must be logged in to take this Survey</p>
 }
 @code {
+    #region Control Definition
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Anonymous;
 
     public override List<Resource> Resources => new List<Resource>()
-{
+    {
         new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" },
         new Resource { ResourceType = ResourceType.Script, Url = ModulePath() + "Module.js" }
     };
+    #endregion
 
-    Survey _Survey;
-    bool IsLoggedIn = false;
+    string strError = "";
+    System.Security.Claims.ClaimsPrincipal user;
+    bool isAuthenticated = false;
+    int UserId = -1;
+
+    bool? ExistingSurveys = null;
+    bool ShowSurveyComplete = false;
+    Survey SelectedSurvey;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,15 +191,163 @@ else
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             if (authState.User.Identity.IsAuthenticated)
             {
-                IsLoggedIn = true;
+                isAuthenticated = true;
             }
 
-            _Survey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
+            SelectedSurvey = await SurveyService.GetSurveyAsync(ModuleState.ModuleId);
         }
         catch (Exception ex)
         {
             await logger.LogError(ex, "Error Loading Survey {Error}", ex.Message);
             AddModuleMessage("Error Loading Survey", MessageType.Error);
         }
+    }
+
+    async Task SaveSurvey()
+    {
+        //try
+        //{
+        //    var result =
+        //            await @Service.CreateSurveyAnswersAsync(SelectedSurvey);
+
+        //    CompleteSurvey();
+        //}
+        //catch (Exception ex)
+        //{
+        //    strError = ex.GetBaseException().Message;
+        //}
+    }
+
+    void CompleteSurvey()
+    {
+        ShowSurveyComplete = true;
+
+        // Clear Answers
+        foreach (var item in SelectedSurvey.SurveyItem)
+        {
+            item.AnswerValueString = null;
+            item.AnswerValueDateTime = null;
+            item.AnswerValueList = null;
+        }
+    }
+
+    // Survey Results
+
+    int SurveyResultsCount;
+    IEnumerable<SurveyItem> SurveyResults;
+
+    async Task LoadSurveyResultsData(LoadDataArgs args)
+    {
+        //// Get Survey Items
+        //// Don't include "Text Area"
+
+        //var query = dbContext.SurveyItem
+        //    .Where(x => x.Survey == SelectedSurvey.Id)
+        //    .Where(x => x.ItemType != "Text Area")
+        //    .Include(x => x.SurveyItemOption)
+        //    .OrderBy(x => x.Position).AsQueryable();
+
+        //if (!string.IsNullOrEmpty(args.Filter))
+        //{
+        //    query = query.Where(args.Filter);
+        //}
+
+        //if (!string.IsNullOrEmpty(args.OrderBy))
+        //{
+        //    query = query.OrderBy(args.OrderBy);
+        //}
+
+        //var Results = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+
+        //List<DTOSurveyItem> SurveyResultsCollection = new List<DTOSurveyItem>();
+
+        //foreach (var SurveyItem in Results)
+        //{
+        //    DTOSurveyItem NewDTOSurveyItem = new DTOSurveyItem();
+
+        //    NewDTOSurveyItem.Id = SurveyItem.Id;
+        //    NewDTOSurveyItem.ItemLabel = SurveyItem.ItemLabel;
+        //    NewDTOSurveyItem.ItemType = SurveyItem.ItemType;
+        //    NewDTOSurveyItem.Position = SurveyItem.Position;
+        //    NewDTOSurveyItem.Required = SurveyItem.Required;
+
+        //    List<AnswerResponse> ColAnswerResponse = new List<AnswerResponse>();
+
+        //    if ((SurveyItem.ItemType == "Date") || (SurveyItem.ItemType == "Date Time"))
+        //    {
+        //        var TempColAnswerResponse = dbContext.SurveyAnswer
+        //            .Where(x => x.SurveyItemId == SurveyItem.Id)
+        //            .GroupBy(n => n.AnswerValueDateTime)
+        //            .Select(n => new AnswerResponse
+        //            {
+        //                OptionLabel = n.Key.Value.ToString(),
+        //                Responses = n.Count()
+        //            }
+        //            ).OrderBy(n => n.OptionLabel).ToList();
+
+        //        foreach (var item in TempColAnswerResponse)
+        //        {
+        //            string ShortDate = item.OptionLabel;
+
+        //            try
+        //            {
+        //                DateTime dtTempDate = Convert.ToDateTime(item.OptionLabel);
+        //                ShortDate = dtTempDate.ToShortDateString();
+        //            }
+        //            catch
+        //            {
+        //                // use orginal string
+        //            }
+
+        //            ColAnswerResponse.Add(
+        //                new AnswerResponse
+        //                {
+        //                    OptionLabel = ShortDate,
+        //                    Responses = item.Responses
+        //                }
+        //                );
+        //        }
+        //    }
+        //    else
+        //    {
+        //        ColAnswerResponse = dbContext.SurveyAnswer
+        //            .Where(x => x.SurveyItemId == SurveyItem.Id)
+        //            .GroupBy(n => n.AnswerValue)
+        //            .Select(n => new AnswerResponse
+        //            {
+        //                OptionLabel = n.Key,
+        //                Responses = n.Count()
+        //            }
+        //            ).OrderBy(n => n.OptionLabel).ToList();
+        //    }
+
+        //    if (ColAnswerResponse.Count > 10)
+        //    {
+        //        // Only take top 10 
+        //        NewDTOSurveyItem.AnswerResponses = ColAnswerResponse
+        //            .OrderByDescending(x => x.Responses)
+        //            .Take(10).ToList();
+
+        //        // Put remaining items in "Other"
+        //        var ColOtherItems = ColAnswerResponse.OrderByDescending(x => x.Responses).Skip(10).ToList();
+        //        var SumOfOther = ColOtherItems.Sum(x => x.Responses);
+        //        NewDTOSurveyItem.AnswerResponses.Add(new AnswerResponse() { OptionLabel = "Other", Responses = SumOfOther });
+        //    }
+        //    else
+        //    {
+        //        NewDTOSurveyItem.AnswerResponses = ColAnswerResponse;
+        //    }
+
+        //    SurveyResultsCollection.Add(NewDTOSurveyItem);
+        //}
+
+        //SurveyResultsCount = dbContext.SurveyItem
+        //    .Where(x => x.Survey == SelectedSurvey.Id)
+        //    .Where(x => x.ItemType != "Text Area")
+        //    .Count();
+
+        //SurveyResults = SurveyResultsCollection;
+
+        //await InvokeAsync(StateHasChanged);
     }
 }
