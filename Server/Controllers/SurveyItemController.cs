@@ -116,35 +116,37 @@ namespace Oqtane.Survey.Controllers
                 {
                     // Move Down
 
-                    //// Move the current element in that position
-                    //var CurrentSurveyItem =
-                    //    await @Service.GetSurveyItemAsync(
-                    //        SelectedSurvey.SurveyItem
-                    //        .Where(x => x.Position == DesiredPosition)
-                    //        .FirstOrDefault().Id);
+                    int DesiredPosition = (SurveyItem.Position + 1);
 
-                    //if (CurrentSurveyItem != null)
-                    //{
-                    //    // Move it up
-                    //    CurrentSurveyItem.Position = CurrentSurveyItem.Position - 1;
-                    //    // Update it
-                    //    await Service.UpdateSurveyItemAsync(CurrentSurveyItem);
-                    //}
+                    // Move the current element in that position
+                    var CurrentSurveyItem =
+                            objSurvey.OqtaneSurveyItem
+                            .Where(x => x.Position == DesiredPosition)
+                            .FirstOrDefault();
 
-                    //// Move Item Down
-                    //var SurveyItemToMoveDown =
-                    //    await @Service.GetSurveyItemAsync(
-                    //        SelectedSurvey.SurveyItem
-                    //        .Where(x => x.Id == objSurveyItem.Id)
-                    //        .FirstOrDefault().Id);
+                    if (CurrentSurveyItem != null)
+                    {
+                        // Move it down
+                        CurrentSurveyItem.Position = CurrentSurveyItem.Position - 1;
 
-                    //if (SurveyItemToMoveDown != null)
-                    //{
-                    //    // Move it up
-                    //    SurveyItemToMoveDown.Position = SurveyItemToMoveDown.Position + 1;
-                    //    // Update it
-                    //    await Service.UpdateSurveyItemAsync(SurveyItemToMoveDown);
-                    //}
+                        // Update it
+                        _SurveyRepository.UpdateSurveyItem(ConvertToSurveyItem(CurrentSurveyItem));
+                    }
+
+                    // Move Item Up
+                    var SurveyItemToMoveUp =
+                         objSurvey.OqtaneSurveyItem
+                            .Where(x => x.Id == SurveyItem.Id)
+                            .FirstOrDefault();
+
+                    if (SurveyItemToMoveUp != null)
+                    {
+                        // Move it up
+                        SurveyItemToMoveUp.Position = SurveyItemToMoveUp.Position + 1;
+
+                        // Update it
+                        _SurveyRepository.UpdateSurveyItem(ConvertToSurveyItem(SurveyItemToMoveUp));
+                    }
 
                 }
 
