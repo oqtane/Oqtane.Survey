@@ -1,7 +1,7 @@
 # Oqtane Survey Module
 An [Oqtane](https://github.com/oqtane/oqtane.framework) module that allows administrators to create user surveys.
 # ** In Progress **
-![Image 36](https://user-images.githubusercontent.com/1857799/108003771-93cff380-6fa8-11eb-80c3-97ee3964566e.png)
+![Animation](https://user-images.githubusercontent.com/1857799/108630910-2d215e80-741c-11eb-91eb-8249195728fa.gif)
 
 ## Planned Features
 
