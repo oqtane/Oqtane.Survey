@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 using System.Linq;
 using System.Collections.Generic;
 using Oqtane.Modules;
@@ -6,6 +7,7 @@ using Oqtane.Survey.Models;
 using System.Threading.Tasks;
 using System;
 using Oqtane.Survey.Server.Repository;
+using Radzen;
 
 namespace Oqtane.Survey.Repository
 {
@@ -317,6 +319,121 @@ namespace Oqtane.Survey.Repository
                 DetachAllEntities();
                 throw;
             }
+        }
+        #endregion
+
+        #region public List<SurveyItem> SurveyResultsData(LoadDataArgs args, int SelectedSurveyId)
+        public List<SurveyItem> SurveyResultsData(LoadDataArgs args, int SelectedSurveyId)
+        {
+            // Get Survey Items
+            // Don't include "Text Area"
+
+            var query = _db.OqtaneSurveyItem
+                .Where(x => x.Survey == SelectedSurveyId)
+                .Where(x => x.ItemType != "Text Area")
+                .Include(x => x.OqtaneSurveyItemOption)
+                .OrderBy(x => x.Position).AsQueryable();
+
+            if (!string.IsNullOrEmpty(args.Filter))
+            {
+                query = query.Where(args.Filter);
+            }
+
+            if (!string.IsNullOrEmpty(args.OrderBy))
+            {
+                query = query.OrderBy(args.OrderBy);
+            }
+
+            var Results = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
+
+            List<SurveyItem> SurveyResultsCollection = new List<SurveyItem>();
+
+            foreach (var SurveyItem in Results)
+            {
+                SurveyItem NewDTOSurveyItem = new SurveyItem();
+
+                NewDTOSurveyItem.Id = SurveyItem.Id;
+                NewDTOSurveyItem.ItemLabel = SurveyItem.ItemLabel;
+                NewDTOSurveyItem.ItemType = SurveyItem.ItemType;
+                NewDTOSurveyItem.Position = SurveyItem.Position;
+                NewDTOSurveyItem.Required = SurveyItem.Required;
+
+                List<AnswerResponse> ColAnswerResponse = new List<AnswerResponse>();
+
+                if ((SurveyItem.ItemType == "Date") || (SurveyItem.ItemType == "Date Time"))
+                {
+                    var TempColAnswerResponse = _db.OqtaneSurveyAnswer
+                        .Where(x => x.SurveyItemId == SurveyItem.Id)
+                        .GroupBy(n => n.AnswerValueDateTime)
+                        .Select(n => new AnswerResponse
+                        {
+                            OptionLabel = n.Key.Value.ToString(),
+                            Responses = n.Count()
+                        }
+                        ).OrderBy(n => n.OptionLabel).ToList();
+
+                    foreach (var item in TempColAnswerResponse)
+                    {
+                        string ShortDate = item.OptionLabel;
+
+                        try
+                        {
+                            DateTime dtTempDate = Convert.ToDateTime(item.OptionLabel);
+                            ShortDate = dtTempDate.ToShortDateString();
+                        }
+                        catch
+                        {
+                            // use original string
+                        }
+
+                        ColAnswerResponse.Add(
+                            new AnswerResponse
+                            {
+                                OptionLabel = ShortDate,
+                                Responses = item.Responses
+                            }
+                            );
+                    }
+                }
+                else
+                {
+                    ColAnswerResponse = _db.OqtaneSurveyAnswer
+                        .Where(x => x.SurveyItemId == SurveyItem.Id)
+                        .GroupBy(n => n.AnswerValue)
+                        .Select(n => new AnswerResponse
+                        {
+                            OptionLabel = n.Key,
+                            Responses = n.Count()
+                        }
+                        ).OrderBy(n => n.OptionLabel).ToList();
+                }
+
+                if (ColAnswerResponse.Count > 10)
+                {
+                    // Only take top 10 
+                    NewDTOSurveyItem.AnswerResponses = ColAnswerResponse
+                        .OrderByDescending(x => x.Responses)
+                        .Take(10).ToList();
+
+                    // Put remaining items in "Other"
+                    var ColOtherItems = ColAnswerResponse.OrderByDescending(x => x.Responses).Skip(10).ToList();
+                    var SumOfOther = ColOtherItems.Sum(x => x.Responses);
+                    NewDTOSurveyItem.AnswerResponses.Add(new AnswerResponse() { OptionLabel = "Other", Responses = SumOfOther });
+                }
+                else
+                {
+                    NewDTOSurveyItem.AnswerResponses = ColAnswerResponse;
+                }
+
+                SurveyResultsCollection.Add(NewDTOSurveyItem);
+            }
+
+            int SurveyResultsCount = _db.OqtaneSurveyItem
+                .Where(x => x.Survey == SelectedSurveyId)
+                .Where(x => x.ItemType != "Text Area")
+                .Count();
+
+            return SurveyResultsCollection;
         }
         #endregion
 
