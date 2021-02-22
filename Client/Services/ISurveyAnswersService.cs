@@ -7,7 +7,7 @@ namespace Oqtane.Survey.Services
 {
     public interface ISurveyAnswersService
     {
-        Task<List<Models.SurveyItem>> SurveyResultsDataAsync(int SelectedSurveyId, LoadDataArgs args);
+        Task<List<Models.SurveyItem>> SurveyResultsDataAsync(int ModuleId, int SelectedSurveyId, LoadDataArgs args);
         Task CreateSurveyAnswersAsync(Models.Survey Survey);
     }
 }

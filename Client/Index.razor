@@ -226,7 +226,7 @@ else
     async Task LoadSurveyResultsData(LoadDataArgs args)
     {
 
-        SurveyResults = await SurveyAnswersService.SurveyResultsDataAsync(SelectedSurvey.SurveyId, args);
+        SurveyResults = await SurveyAnswersService.SurveyResultsDataAsync(ModuleState.ModuleId, SelectedSurvey.SurveyId, args);
 
         SurveyResultsCount = SelectedSurvey.SurveyItem
             .Where(x => x.ItemType != "Text Area")

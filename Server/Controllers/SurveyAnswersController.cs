@@ -41,10 +41,7 @@ namespace Oqtane.Survey.Controllers
         {
             List<Models.SurveyItem> Response = new List<Models.SurveyItem>();
 
-            if (ModelState.IsValid && SelectedSurveyId == _entityId)
-            {
-                Response = _SurveyRepository.SurveyResultsData(SelectedSurveyId, args);
-            }
+            Response = _SurveyRepository.SurveyResultsData(SelectedSurveyId, args);
 
             return Response;
         }

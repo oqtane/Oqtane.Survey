@@ -21,10 +21,10 @@ namespace Oqtane.Survey.Services
 
         private string Apiurl => CreateApiUrl(_siteState.Alias, "SurveyAnswers");
 
-        public async Task<List<Models.SurveyItem>> SurveyResultsDataAsync(int SelectedSurveyId, LoadDataArgs args)
+        public async Task<List<Models.SurveyItem>> SurveyResultsDataAsync(int ModuleId, int SelectedSurveyId, LoadDataArgs args)
         {
             return await PostJsonAsync<LoadDataArgs,List<Models.SurveyItem>>(
-                CreateAuthorizationPolicyUrl($"{Apiurl}/{SelectedSurveyId}", SelectedSurveyId), 
+                CreateAuthorizationPolicyUrl($"{Apiurl}/{SelectedSurveyId}", ModuleId), 
                 args);
         }
 
