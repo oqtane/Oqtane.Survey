@@ -165,11 +165,8 @@ else
     };
     #endregion
 
-    System.Security.Claims.ClaimsPrincipal user;
-    bool isAuthenticated = false;
-    int UserId = -1;
 
-    bool? ExistingSurveys = null;
+    bool isAuthenticated = false;
     bool ShowSurveyComplete = false;
     Survey SelectedSurvey;
 
@@ -228,116 +225,13 @@ else
 
     async Task LoadSurveyResultsData(LoadDataArgs args)
     {
-        //// Get Survey Items
-        //// Don't include "Text Area"
 
-        //var query = dbContext.SurveyItem
-        //    .Where(x => x.Survey == SelectedSurvey.Id)
-        //    .Where(x => x.ItemType != "Text Area")
-        //    .Include(x => x.SurveyItemOption)
-        //    .OrderBy(x => x.Position).AsQueryable();
+        SurveyResults = await SurveyAnswersService.SurveyResultsDataAsync(SelectedSurvey.SurveyId, args);
 
-        //if (!string.IsNullOrEmpty(args.Filter))
-        //{
-        //    query = query.Where(args.Filter);
-        //}
+        SurveyResultsCount = SelectedSurvey.SurveyItem
+            .Where(x => x.ItemType != "Text Area")
+            .Count();
 
-        //if (!string.IsNullOrEmpty(args.OrderBy))
-        //{
-        //    query = query.OrderBy(args.OrderBy);
-        //}
-
-        //var Results = query.Skip(args.Skip.Value).Take(args.Top.Value).ToList();
-
-        //List<DTOSurveyItem> SurveyResultsCollection = new List<DTOSurveyItem>();
-
-        //foreach (var SurveyItem in Results)
-        //{
-        //    DTOSurveyItem NewDTOSurveyItem = new DTOSurveyItem();
-
-        //    NewDTOSurveyItem.Id = SurveyItem.Id;
-        //    NewDTOSurveyItem.ItemLabel = SurveyItem.ItemLabel;
-        //    NewDTOSurveyItem.ItemType = SurveyItem.ItemType;
-        //    NewDTOSurveyItem.Position = SurveyItem.Position;
-        //    NewDTOSurveyItem.Required = SurveyItem.Required;
-
-        //    List<AnswerResponse> ColAnswerResponse = new List<AnswerResponse>();
-
-        //    if ((SurveyItem.ItemType == "Date") || (SurveyItem.ItemType == "Date Time"))
-        //    {
-        //        var TempColAnswerResponse = dbContext.SurveyAnswer
-        //            .Where(x => x.SurveyItemId == SurveyItem.Id)
-        //            .GroupBy(n => n.AnswerValueDateTime)
-        //            .Select(n => new AnswerResponse
-        //            {
-        //                OptionLabel = n.Key.Value.ToString(),
-        //                Responses = n.Count()
-        //            }
-        //            ).OrderBy(n => n.OptionLabel).ToList();
-
-        //        foreach (var item in TempColAnswerResponse)
-        //        {
-        //            string ShortDate = item.OptionLabel;
-
-        //            try
-        //            {
-        //                DateTime dtTempDate = Convert.ToDateTime(item.OptionLabel);
-        //                ShortDate = dtTempDate.ToShortDateString();
-        //            }
-        //            catch
-        //            {
-        //                // use orginal string
-        //            }
-
-        //            ColAnswerResponse.Add(
-        //                new AnswerResponse
-        //                {
-        //                    OptionLabel = ShortDate,
-        //                    Responses = item.Responses
-        //                }
-        //                );
-        //        }
-        //    }
-        //    else
-        //    {
-        //        ColAnswerResponse = dbContext.SurveyAnswer
-        //            .Where(x => x.SurveyItemId == SurveyItem.Id)
-        //            .GroupBy(n => n.AnswerValue)
-        //            .Select(n => new AnswerResponse
-        //            {
-        //                OptionLabel = n.Key,
-        //                Responses = n.Count()
-        //            }
-        //            ).OrderBy(n => n.OptionLabel).ToList();
-        //    }
-
-        //    if (ColAnswerResponse.Count > 10)
-        //    {
-        //        // Only take top 10
-        //        NewDTOSurveyItem.AnswerResponses = ColAnswerResponse
-        //            .OrderByDescending(x => x.Responses)
-        //            .Take(10).ToList();
-
-        //        // Put remaining items in "Other"
-        //        var ColOtherItems = ColAnswerResponse.OrderByDescending(x => x.Responses).Skip(10).ToList();
-        //        var SumOfOther = ColOtherItems.Sum(x => x.Responses);
-        //        NewDTOSurveyItem.AnswerResponses.Add(new AnswerResponse() { OptionLabel = "Other", Responses = SumOfOther });
-        //    }
-        //    else
-        //    {
-        //        NewDTOSurveyItem.AnswerResponses = ColAnswerResponse;
-        //    }
-
-        //    SurveyResultsCollection.Add(NewDTOSurveyItem);
-        //}
-
-        //SurveyResultsCount = dbContext.SurveyItem
-        //    .Where(x => x.Survey == SelectedSurvey.Id)
-        //    .Where(x => x.ItemType != "Text Area")
-        //    .Count();
-
-        //SurveyResults = SurveyResultsCollection;
-
-        //await InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 }
