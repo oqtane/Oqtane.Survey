@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Oqtane.Survey.Models;
 using Oqtane.Survey.Server.Repository;
+using Radzen;
 
 namespace Oqtane.Survey.Repository
 {
@@ -19,5 +20,6 @@ namespace Oqtane.Survey.Repository
         OqtaneSurveyItem UpdateSurveyItem(Models.SurveyItem objExistingSurveyItem);
         bool DeleteSurveyItem(int Id);
         bool CreateSurveyAnswers(Models.Survey paramDTOSurvey);
+        List<SurveyItem> SurveyResultsData(int SelectedSurveyId, LoadDataArgs args);
     }
 }

@@ -322,8 +322,8 @@ namespace Oqtane.Survey.Repository
         }
         #endregion
 
-        #region public List<SurveyItem> SurveyResultsData(LoadDataArgs args, int SelectedSurveyId)
-        public List<SurveyItem> SurveyResultsData(LoadDataArgs args, int SelectedSurveyId)
+        #region public List<SurveyItem> SurveyResultsData(int SelectedSurveyId, LoadDataArgs args)
+        public List<SurveyItem> SurveyResultsData(int SelectedSurveyId, LoadDataArgs args)
         {
             // Get Survey Items
             // Don't include "Text Area"

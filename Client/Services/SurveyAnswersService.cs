@@ -6,6 +6,7 @@ using Oqtane.Modules;
 using Oqtane.Services;
 using Oqtane.Shared;
 using Oqtane.Survey.Models;
+using Radzen;
 
 namespace Oqtane.Survey.Services
 {
@@ -19,6 +20,13 @@ namespace Oqtane.Survey.Services
         }
 
         private string Apiurl => CreateApiUrl(_siteState.Alias, "SurveyAnswers");
+
+        public async Task<List<Models.SurveyItem>> SurveyResultsDataAsync(int SelectedSurveyId, LoadDataArgs args)
+        {
+            return await PostJsonAsync<LoadDataArgs,List<Models.SurveyItem>>(
+                CreateAuthorizationPolicyUrl($"{Apiurl}/{SelectedSurveyId}", SelectedSurveyId), 
+                args);
+        }
 
         public async Task CreateSurveyAnswersAsync(Models.Survey Survey)
         {
