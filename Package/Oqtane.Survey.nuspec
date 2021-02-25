@@ -25,7 +25,9 @@
     <file src="..\Server\bin\Release\net5.0\Oqtane.Survey.Server.Oqtane.dll" target="lib\net5.0" /> 
     <file src="..\Server\bin\Release\net5.0\Oqtane.Survey.Server.Oqtane.pdb" target="lib\net5.0" /> 
     <file src="..\Shared\bin\Release\net5.0\Oqtane.Survey.Shared.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Shared\bin\Release\net5.0\Oqtane.Survey.Shared.Oqtane.pdb" target="lib\net5.0" /> 
+    <file src="..\Shared\bin\Release\net5.0\Oqtane.Survey.Shared.Oqtane.pdb" target="lib\net5.0" />
+    <file src="..\Server\bin\Release\net5.0\System.Linq.Dynamic.Core.dll" target="lib\net5.0" />
+    <file src="..\Server\bin\Release\net5.0\Radzen.Blazor.dll" target="lib\net5.0" />
     <file src="..\Server\wwwroot\**\*.*" target="wwwroot" /> 
   </files>
 </package>
