@@ -40,10 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Modules\Oqtane.Survey\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="wwwroot\_content\**\*.*" />
     <None Include="wwwroot\_content\**\*.*" />
   </ItemGroup>
