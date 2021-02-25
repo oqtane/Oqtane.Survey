@@ -3,7 +3,7 @@ An [Oqtane](https://github.com/oqtane/oqtane.framework) module that allows admin
 
 ![Animation](https://user-images.githubusercontent.com/1857799/108630910-2d215e80-741c-11eb-91eb-8249195728fa.gif)
 
-## Planned Features
+## Features
 
 * Unlimited Surveys
 * Unlimited Survey Questions
