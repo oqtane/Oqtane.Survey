@@ -12,7 +12,7 @@ namespace Oqtane.Survey
             Version = "1.0.0",
             ServerManagerType = "Oqtane.Survey.Manager.SurveyManager, Oqtane.Survey.Server.Oqtane",
             ReleaseVersions = "1.0.0",
-            Dependencies = "Oqtane.Survey.Shared.Oqtane"
+            Dependencies = "Oqtane.Survey.Shared.Oqtane,Radzen.Blazor,System.Linq.Dynamic.Core"
         };
     }
 }
