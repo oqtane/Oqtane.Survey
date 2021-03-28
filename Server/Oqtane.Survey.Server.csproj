@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Version>1.1.0</Version>
+    <Version>1.0.1</Version>
     <Product>Oqtane.Survey</Product>
     <Authors>Oqtane</Authors>
     <Company>Oqtane</Company>
