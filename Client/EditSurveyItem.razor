@@ -24,16 +24,14 @@
     <div class="row">
         <div class="col-md-6">
             <div><b>Type</b></div>
-            <RadzenRadioButtonList @bind-Value=@SurveyTypeValue TValue="int">
-                <Items>
-                    <RadzenRadioButtonListItem Text="Text Box" Value="1" />
-                    <RadzenRadioButtonListItem Text="Text Area" Value="2" />
-                    <RadzenRadioButtonListItem Text="Date" Value="3" />
-                    <RadzenRadioButtonListItem Text="Date Time" Value="4" />
-                    <RadzenRadioButtonListItem Text="Dropdown" Value="5" />
-                    <RadzenRadioButtonListItem Text="Multi-Select Dropdown" Value="6" />
-                </Items>
-            </RadzenRadioButtonList>
+            <select @bind="SurveyTypeValue" class="form-control" style="width:250px;">
+                <option Value="1">Text Box</option>
+                <option Value="2">Text Area</option>
+                <option Value="3">Date</option>
+                <option Value="4">Date Time</option>
+                <option Value="5">Dropdown</option>
+                <option Value="6">Multi-Select Dropdown</option>
+            </select>
         </div>
         <div class="col-md-6">
             <div><b>Required</b></div>
