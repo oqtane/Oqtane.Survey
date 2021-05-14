@@ -170,7 +170,10 @@ namespace Oqtane.Survey.Controllers
             objAddSurvey.CreatedOn = objOqtaneSurvey.CreatedOn;
             objAddSurvey.ModifiedBy = objOqtaneSurvey.ModifiedBy;
             objAddSurvey.ModifiedOn = objOqtaneSurvey.ModifiedOn;
-            objAddSurvey.UserId = objOqtaneSurvey.UserId;
+            if (objOqtaneSurvey.UserId != null)
+            {
+                objAddSurvey.UserId = objOqtaneSurvey.UserId.Value;
+            }
 
             // Create new Collection
             objAddSurvey.SurveyItem = new List<SurveyItem>();

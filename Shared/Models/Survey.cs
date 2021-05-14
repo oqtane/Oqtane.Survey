@@ -14,7 +14,7 @@ namespace Oqtane.Survey.Models
         public string ModifiedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime ModifiedOn { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public List<SurveyItem> SurveyItem { get; set; }
     }
     public class SurveyItem
@@ -51,6 +51,6 @@ namespace Oqtane.Survey.Models
         public int SurveyItemId { get; set; }
         public string AnswerValue { get; set; }
         public DateTime AnswerValueDateTime { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
     }
 }

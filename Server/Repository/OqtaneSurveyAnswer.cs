@@ -10,7 +10,7 @@ namespace Oqtane.Survey.Server.Repository
         public int SurveyItemId { get; set; }
         public string AnswerValue { get; set; }
         public DateTime? AnswerValueDateTime { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public virtual OqtaneSurveyItem SurveyItem { get; set; }
     }
