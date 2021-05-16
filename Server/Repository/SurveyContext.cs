@@ -46,6 +46,8 @@ namespace Oqtane.Survey.Repository
             {
                 entity.Property(e => e.AnswerValue).HasMaxLength(500);
 
+                entity.Property(e => e.AnonymousCookie).HasMaxLength(500);
+
                 entity.Property(e => e.AnswerValueDateTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.SurveyItem)

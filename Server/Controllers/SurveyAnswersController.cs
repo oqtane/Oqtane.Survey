@@ -54,10 +54,18 @@ namespace Oqtane.Survey.Controllers
             if (ModelState.IsValid && Survey.ModuleId == _entityId)
             {
                 // Get User
-                var User = _users.GetUser(this.User.Identity.Name);
+                if (this.User.Identity.IsAuthenticated)
+                {
+                    var User = _users.GetUser(this.User.Identity.Name);
 
-                // Add User to Survey object
-                Survey.UserId = User.UserId;
+                    // Add User to Survey object
+                    Survey.UserId = User.UserId;
+                }
+                else
+                {
+                    // The AnonymousCookie was passed by the Client
+                    Survey.UserId = null;
+                }
 
                 bool boolResult = _SurveyRepository.CreateSurveyAnswers(Survey);
 

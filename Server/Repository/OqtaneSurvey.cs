@@ -15,7 +15,7 @@ namespace Oqtane.Survey.Server.Repository
 
         [Key]
         public int SurveyId { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public int ModuleId { get; set; }
         public string SurveyName { get; set; }
         public string CreatedBy { get; set; }
