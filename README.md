@@ -3,7 +3,7 @@ An [Oqtane](https://github.com/oqtane/oqtane.framework) module that allows admin
 
 Documentation: [Blazor Oqtane Survey Module](https://blazorhelpwebsite.com/ViewBlogPost/48)
 
-![Animation](https://user-images.githubusercontent.com/1857799/108630910-2d215e80-741c-11eb-91eb-8249195728fa.gif)
+![Animation](https://user-images.githubusercontent.com/1857799/118409746-d4d7b280-b640-11eb-87ea-c7601c89e2ab.gif)
 
 ## Features
 
