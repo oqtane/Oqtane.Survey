@@ -24,7 +24,7 @@ Documentation: [Blazor Oqtane Survey Module](https://blazorhelpwebsite.com/ViewB
 
 # Install (into Oqtane)
 
-In a runing version of **Oqtane**, log in as the **Administrator**, and open the **Module Management** in **Admin Dashboard**. On **Download** tab find **Survey** in list of modules. Click on its **Download** button. After it downloads click the **Install** button.
+In a running version of **Oqtane**, log in as the **Administrator**, and open the **Module Management** in **Admin Dashboard**. On **Download** tab find **Survey** in list of modules. Click on its **Download** button. After it downloads click the **Install** button.
 
 # Install Source
 In order to deploy/install a module you should modify the folder path in the debug.cmd and release.cmd files to match the location on your system where the Oqtane framework is installed. Then when you execute this file it will create a Nuget package and copy it to the specified location where the framework will automatically install it upon startup.
