@@ -11,6 +11,7 @@ namespace Oqtane.Survey.Server.Repository
         public string AnswerValue { get; set; }
         public DateTime? AnswerValueDateTime { get; set; }
         public int? UserId { get; set; }
+        public string AnonymousCookie { get; set; }
 
         public virtual OqtaneSurveyItem SurveyItem { get; set; }
     }

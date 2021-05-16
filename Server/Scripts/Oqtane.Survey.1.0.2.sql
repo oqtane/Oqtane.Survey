@@ -26,7 +26,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'[dbo].[OqtaneSurveyAnswer]') AND name = 'AnonymousCookie')
 BEGIN
 
-ALTER TABLE dbo.OqtaneSurveyAnswer ADD AnonymousCookie nvarchar(500) NULL
+ALTER TABLE [dbo].[OqtaneSurveyAnswer] ADD [AnonymousCookie] nvarchar(500) NULL
 
 END
 GO
