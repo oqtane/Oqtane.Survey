@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Oqtane.Survey.1.0.0.sql" />
+    <EmbeddedResource Include="Scripts\Oqtane.Survey.1.0.2.sql" />
     <EmbeddedResource Include="Scripts\Oqtane.Survey.Uninstall.sql" />
   </ItemGroup>
 
@@ -42,6 +43,10 @@
   <ItemGroup>
     <Content Remove="wwwroot\_content\**\*.*" />
     <None Include="wwwroot\_content\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Scripts\Oqtane.Survey.1.0.2.sql" />
   </ItemGroup>
 
   <ItemGroup>
