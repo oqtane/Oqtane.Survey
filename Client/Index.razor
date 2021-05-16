@@ -8,6 +8,7 @@
 @inject ISurveyAnswersService SurveyAnswersService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JsRuntime
 
 @if (SelectedSurvey != null)
 {
@@ -102,16 +103,9 @@ else
                                 </div>
                             }
                         </div>
-                        @if (isAuthenticated)
-                        {
-                            <div class="row">
-                                <RadzenButton ButtonType="ButtonType.Submit" Text="Submit"></RadzenButton>
-                            </div>
-                        }
-                        else
-                        {
-                            <b>You must be logged in to take this Survey</b>
-                        }
+                        <div class="row">
+                            <RadzenButton ButtonType="ButtonType.Submit" Text="Submit"></RadzenButton>
+                        </div>
                     </RadzenTemplateForm>
                 }
                 @if (SelectedSurvey.SurveyItem.Count == 0)
@@ -194,6 +188,26 @@ else
     {
         try
         {
+            if (!isAuthenticated)
+            {
+                // Try to get the Anonymous Cookie
+                var cookieName = $"Oqtane-Survey-Instance-{ModuleState.ModuleId}";
+                var interop = new Oqtane.UI.Interop(JsRuntime);
+
+                var AnonymousCookie = await interop.GetCookie(cookieName);
+
+                if((AnonymousCookie is null) || (AnonymousCookie == ""))
+                {
+                    // Create a GUID for the user
+                    AnonymousCookie = Guid.NewGuid().ToString();
+
+                    await interop.SetCookie(cookieName, AnonymousCookie, 360);
+                }
+
+                SelectedSurvey.AnonymousCookie = AnonymousCookie;
+                SelectedSurvey.UserId = null;
+            }
+
             await SurveyAnswersService.CreateSurveyAnswersAsync(SelectedSurvey);
 
             CompleteSurvey();

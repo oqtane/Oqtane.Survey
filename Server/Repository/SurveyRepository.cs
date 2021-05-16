@@ -265,10 +265,22 @@ namespace Oqtane.Survey.Repository
                 foreach (var SurveyItem in paramDTOSurvey.SurveyItem)
                 {
                     // Delete possible existing answer
-                    var ExistingAnswers = _db.OqtaneSurveyAnswer
-                        .Where(x => x.SurveyItemId == SurveyItem.Id)
-                        .Where(x => x.UserId == paramDTOSurvey.UserId)
-                        .ToList();
+                    List<OqtaneSurveyAnswer> ExistingAnswers;
+
+                    if (paramDTOSurvey.UserId != null)
+                    {                        
+                        ExistingAnswers = _db.OqtaneSurveyAnswer
+                            .Where(x => x.SurveyItemId == SurveyItem.Id)
+                            .Where(x => x.UserId == paramDTOSurvey.UserId)
+                            .ToList();
+                    }
+                    else
+                    {
+                        ExistingAnswers = _db.OqtaneSurveyAnswer
+                            .Where(x => x.SurveyItemId == SurveyItem.Id)
+                            .Where(x => x.AnonymousCookie == paramDTOSurvey.AnonymousCookie)
+                            .ToList();
+                    }
 
                     if (ExistingAnswers != null)
                     {
@@ -290,7 +302,15 @@ namespace Oqtane.Survey.Repository
                         }
 
                         NewSurveyAnswer.SurveyItemId = SurveyItem.Id;
-                        NewSurveyAnswer.UserId = paramDTOSurvey.UserId;
+
+                        if (paramDTOSurvey.UserId != null)
+                        {
+                            NewSurveyAnswer.UserId = paramDTOSurvey.UserId;
+                        }
+                        else
+                        {
+                            NewSurveyAnswer.AnonymousCookie = paramDTOSurvey.AnonymousCookie;
+                        }
 
                         _db.OqtaneSurveyAnswer.Add(NewSurveyAnswer);
                         _db.SaveChanges();
@@ -304,7 +324,15 @@ namespace Oqtane.Survey.Repository
 
                             NewSurveyAnswerValueList.AnswerValue = item;
                             NewSurveyAnswerValueList.SurveyItemId = SurveyItem.Id;
-                            NewSurveyAnswerValueList.UserId = paramDTOSurvey.UserId;
+
+                            if (paramDTOSurvey.UserId != null)
+                            {
+                                NewSurveyAnswerValueList.UserId = paramDTOSurvey.UserId;
+                            }
+                            else
+                            {
+                                NewSurveyAnswerValueList.AnonymousCookie = paramDTOSurvey.AnonymousCookie;
+                            }
 
                             _db.OqtaneSurveyAnswer.Add(NewSurveyAnswerValueList);
                             _db.SaveChanges();
