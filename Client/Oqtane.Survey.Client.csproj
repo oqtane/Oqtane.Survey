@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <Version>1.0.2</Version>
     <Authors>Oqtane</Authors>
@@ -13,13 +13,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.2.0" />
+	<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.0" />
+	<PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
     <PackageReference Include="Radzen.Blazor" Version="3.0.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
-    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,8 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Oqtane.Client" Version="2.0.0" />
-    <PackageReference Include="Oqtane.Shared" Version="2.0.0" />
+    <Reference Include="Oqtane.Client">
+      <HintPath>..\..\oqtane.framework\Oqtane.Server\bin\Debug\net6.0\Oqtane.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Oqtane.Shared">
+      <HintPath>..\..\oqtane.framework\Oqtane.Server\bin\Debug\net6.0\Oqtane.Shared.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,35 +1,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Oqtane.Modules;
 using Oqtane.Models;
 using Oqtane.Infrastructure;
-using Oqtane.Repository;
+using Oqtane.Enums;
 using Oqtane.Survey.Models;
 using Oqtane.Survey.Repository;
 using Oqtane.Survey.Server.Repository;
 
 namespace Oqtane.Survey.Manager
 {
-    public class SurveyManager : IInstallable, IPortable
+    public class SurveyManager : MigratableModuleBase, IInstallable, IPortable
     {
         private ISurveyRepository _SurveyRepository;
-        private ISqlRepository _sql;
+        private readonly ITenantManager _tenantManager;
+        private readonly IHttpContextAccessor _accessor;
 
-        public SurveyManager(ISurveyRepository SurveyRepository, ISqlRepository sql)
+        public SurveyManager(ISurveyRepository SurveyRepository, ITenantManager tenantManager, IHttpContextAccessor accessor)
         {
             _SurveyRepository = SurveyRepository;
-            _sql = sql;
+            _tenantManager = tenantManager;
+            _accessor = accessor;
         }
 
         public bool Install(Tenant tenant, string version)
         {
-            return _sql.ExecuteScript(tenant, GetType().Assembly, "Oqtane.Survey." + version + ".sql");
+            return Migrate(new SurveyContext(_tenantManager, _accessor), tenant, MigrationType.Up);
         }
 
         public bool Uninstall(Tenant tenant)
         {
-            return _sql.ExecuteScript(tenant, GetType().Assembly, "Oqtane.Survey.Uninstall.sql");
+            return Migrate(new SurveyContext(_tenantManager, _accessor), tenant, MigrationType.Down);
         }
 
         public string ExportModule(Module module)

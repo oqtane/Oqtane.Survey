@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Oqtane.Survey</id>
-    <version>1.0.2</version>
+    <version>2.0.0</version>
     <authors>Oqtane</authors>
     <owners>Oqtane</owners>
     <title>Survey</title>
@@ -16,18 +16,18 @@
     <releaseNotes></releaseNotes>
     <summary></summary>
     <dependencies>
-      <dependency id="Oqtane.Framework" version="2.0.0" />
+      <dependency id="Oqtane.Framework" version="3.0.2" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Client\bin\Release\net5.0\Oqtane.Survey.Client.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Client\bin\Release\net5.0\Oqtane.Survey.Client.Oqtane.pdb" target="lib\net5.0" /> 
-    <file src="..\Server\bin\Release\net5.0\Oqtane.Survey.Server.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Server\bin\Release\net5.0\Oqtane.Survey.Server.Oqtane.pdb" target="lib\net5.0" /> 
-    <file src="..\Shared\bin\Release\net5.0\Oqtane.Survey.Shared.Oqtane.dll" target="lib\net5.0" /> 
-    <file src="..\Shared\bin\Release\net5.0\Oqtane.Survey.Shared.Oqtane.pdb" target="lib\net5.0" />
-    <file src="..\Server\bin\Release\net5.0\System.Linq.Dynamic.Core.dll" target="lib\net5.0" />
-    <file src="..\Server\bin\Release\net5.0\Radzen.Blazor.dll" target="lib\net5.0" />
+    <file src="..\Client\bin\Release\net6.0\Oqtane.Survey.Client.Oqtane.dll" target="lib\net6.0" /> 
+    <file src="..\Client\bin\Release\net6.0\Oqtane.Survey.Client.Oqtane.pdb" target="lib\net6.0" /> 
+    <file src="..\Server\bin\Release\net6.0\Oqtane.Survey.Server.Oqtane.dll" target="lib\net6.0" /> 
+    <file src="..\Server\bin\Release\net6.0\Oqtane.Survey.Server.Oqtane.pdb" target="lib\net6.0" /> 
+    <file src="..\Shared\bin\Release\net6.0\Oqtane.Survey.Shared.Oqtane.dll" target="lib\net6.0" /> 
+    <file src="..\Shared\bin\Release\net6.0\Oqtane.Survey.Shared.Oqtane.pdb" target="lib\net6.0" />
+    <file src="..\Server\bin\Release\net6.0\System.Linq.Dynamic.Core.dll" target="lib\net6.0" />
+    <file src="..\Server\bin\Release\net6.0\Radzen.Blazor.dll" target="lib\net6.0" />
     <file src="..\Server\wwwroot\**\*.*" target="wwwroot" /> 
   </files>
 </package>
