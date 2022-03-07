@@ -9,10 +9,11 @@ namespace Oqtane.Survey
         {
             Name = "Survey",
             Description = "Survey",
-            Version = "1.0.2",
+            Version = "2.0.0",
             ServerManagerType = "Oqtane.Survey.Manager.SurveyManager, Oqtane.Survey.Server.Oqtane",
-            ReleaseVersions = "1.0.0,1.0.1,1.0.2",
-            Dependencies = "Oqtane.Survey.Shared.Oqtane,Radzen.Blazor,System.Linq.Dynamic.Core"
+            ReleaseVersions = "1.0.0,1.0.1,1.0.2,2.0.0",
+            Dependencies = "Oqtane.Survey.Shared.Oqtane,Radzen.Blazor,System.Linq.Dynamic.Core",
+            PackageName = "Oqtane.Survey"
         };
     }
 }
