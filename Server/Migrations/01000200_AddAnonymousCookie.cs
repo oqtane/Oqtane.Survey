@@ -17,16 +17,14 @@ namespace Oqtane.Survey.Migrations.Migrations
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var surveyEntityBuilder = new OqtaneSurveyAnswerEntityBuilder(migrationBuilder, ActiveDatabase);
-
-            surveyEntityBuilder.AddStringColumn("AnonymousCookie", 500, true, true);
+            var surveyAnswerEntityBuilder = new OqtaneSurveyAnswerEntityBuilder(migrationBuilder, ActiveDatabase);
+            surveyAnswerEntityBuilder.AddStringColumn("AnonymousCookie", 500, true, true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            var surveyEntityBuilder = new OqtaneSurveyAnswerEntityBuilder(migrationBuilder, ActiveDatabase);
-
-            surveyEntityBuilder.DropColumn("AnonymousCookie");
+            var surveyAnswerEntityBuilder = new OqtaneSurveyAnswerEntityBuilder(migrationBuilder, ActiveDatabase);
+            surveyAnswerEntityBuilder.DropColumn("AnonymousCookie");
         }
     }
 }

@@ -17,14 +17,32 @@ namespace Oqtane.Survey.Migrations.Migrations
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var entityBuilder = new SurveyEntityBuilder(migrationBuilder, ActiveDatabase);
-            entityBuilder.Create();
+            var oqtaneSurveyBuilder = new OqtaneSurveyEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyBuilder.Create();
+
+            var oqtaneSurveyAnswerBuilder = new OqtaneSurveyAnswerEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyAnswerBuilder.Create();
+
+            var oqtaneSurveyItemBuilder = new OqtaneSurveyItemEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyItemBuilder.Create();
+
+            var oqtaneSurveyItemOptionBuilder = new OqtaneSurveyItemOptionEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyItemOptionBuilder.Create();
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            var entityBuilder = new SurveyEntityBuilder(migrationBuilder, ActiveDatabase);
-            entityBuilder.Drop();
+            var oqtaneSurveyItemOptionBuilder = new OqtaneSurveyItemOptionEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyItemOptionBuilder.Drop();
+
+            var oqtaneSurveyAnswerBuilder = new OqtaneSurveyAnswerEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyAnswerBuilder.Drop();
+
+            var oqtaneSurveyItemBuilder = new OqtaneSurveyItemEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyItemBuilder.Drop();
+
+            var oqtaneSurveyBuilder = new OqtaneSurveyEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyBuilder.Drop();
         }
     }
 }
