@@ -11,7 +11,7 @@ namespace Oqtane.Survey.Migrations.EntityBuilders
     {
         private const string _entityTableName = "OqtaneSurveyAnswer";
         private readonly PrimaryKey<OqtaneSurveyAnswerEntityBuilder> _primaryKey = new("PK_OqtaneSurveyAnswer", x => x.Id);
-        private readonly ForeignKey<OqtaneSurveyAnswerEntityBuilder> _oqtaneSurveyForeignKey = new("FK_OqtaneSurveyAnswer_SurveyItem", x => x.SurveyItemId, "SurveyItem", "SurveyItemId", ReferentialAction.Cascade);
+        private readonly ForeignKey<OqtaneSurveyAnswerEntityBuilder> _oqtaneSurveyForeignKey = new("FK_OqtaneSurveyAnswer_OqtaneSurveyItem", x => x.SurveyItemId, "OqtaneSurveyItem", "Id", ReferentialAction.Cascade);
 
         public OqtaneSurveyAnswerEntityBuilder(MigrationBuilder migrationBuilder, IDatabase database) : base(migrationBuilder, database)
         {
@@ -24,8 +24,8 @@ namespace Oqtane.Survey.Migrations.EntityBuilders
         {
             Id = AddAutoIncrementColumn(table, "Id");
             SurveyItemId = AddIntegerColumn(table, "SurveyItemId");
-            AnswerValue = AddMaxStringColumn(table, "AnswerValue");
-            AnswerValueDateTime = AddDateTimeColumn(table, "AnswerValueDateTime");
+            AnswerValue = AddStringColumn(table, "AnswerValue", 500, true);
+            AnswerValueDateTime = AddDateTimeColumn(table, "AnswerValueDateTime", true);
             UserId = AddIntegerColumn(table, "UserId");
             return this;
         }

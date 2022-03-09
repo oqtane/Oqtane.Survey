@@ -24,7 +24,7 @@ namespace Oqtane.Survey.Migrations.EntityBuilders
         {
             Id = AddAutoIncrementColumn(table, "Id");
             SurveyItem = AddIntegerColumn(table, "SurveyItem");
-            OptionLabel = AddMaxStringColumn(table, "OptionLabel");
+            OptionLabel = AddStringColumn(table, "OptionLabel", 500);
             return this;
         }
 

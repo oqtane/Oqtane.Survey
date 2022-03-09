@@ -20,11 +20,11 @@ namespace Oqtane.Survey.Migrations.Migrations
             var oqtaneSurveyBuilder = new OqtaneSurveyEntityBuilder(migrationBuilder, ActiveDatabase);
             oqtaneSurveyBuilder.Create();
 
-            var oqtaneSurveyAnswerBuilder = new OqtaneSurveyAnswerEntityBuilder(migrationBuilder, ActiveDatabase);
-            oqtaneSurveyAnswerBuilder.Create();
-
             var oqtaneSurveyItemBuilder = new OqtaneSurveyItemEntityBuilder(migrationBuilder, ActiveDatabase);
             oqtaneSurveyItemBuilder.Create();
+
+            var oqtaneSurveyAnswerBuilder = new OqtaneSurveyAnswerEntityBuilder(migrationBuilder, ActiveDatabase);
+            oqtaneSurveyAnswerBuilder.Create();
 
             var oqtaneSurveyItemOptionBuilder = new OqtaneSurveyItemOptionEntityBuilder(migrationBuilder, ActiveDatabase);
             oqtaneSurveyItemOptionBuilder.Create();

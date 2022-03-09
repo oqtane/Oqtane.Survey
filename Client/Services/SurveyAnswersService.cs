@@ -19,18 +19,18 @@ namespace Oqtane.Survey.Services
             _siteState = siteState;
         }
 
-        private string Apiurl => CreateApiUrl(_siteState.Alias, "SurveyAnswers");
+        private string Apiurl => CreateApiUrl("SurveyAnswers", _siteState.Alias);
 
         public async Task<List<Models.SurveyItem>> SurveyResultsDataAsync(int ModuleId, int SelectedSurveyId, LoadDataArgs args)
         {
             return await PostJsonAsync<LoadDataArgs,List<Models.SurveyItem>>(
-                CreateAuthorizationPolicyUrl($"{Apiurl}/{SelectedSurveyId}", ModuleId), 
+                CreateAuthorizationPolicyUrl($"{Apiurl}/{SelectedSurveyId}", EntityNames.Module, ModuleId), 
                 args);
         }
 
         public async Task CreateSurveyAnswersAsync(Models.Survey Survey)
         {
-            await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}", Survey.ModuleId), Survey);
+            await PostJsonAsync(CreateAuthorizationPolicyUrl($"{Apiurl}", EntityNames.Module, Survey.ModuleId), Survey);
         }
     }
 }

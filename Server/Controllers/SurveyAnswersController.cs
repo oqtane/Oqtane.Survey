@@ -11,27 +11,20 @@ using Oqtane.Repository;
 using Oqtane.Survey.Server.Repository;
 using System;
 using Radzen;
+using Oqtane.Controllers;
 
 namespace Oqtane.Survey.Controllers
 {
-    [Route(ControllerRoutes.Default)]
-    public class SurveyAnswersController : Controller
+    [Route(ControllerRoutes.ApiRoute)]
+    public class SurveyAnswersController : ModuleControllerBase
     {
         private readonly ISurveyRepository _SurveyRepository;
         private readonly IUserRepository _users;
-        private readonly ILogManager _logger;
-        protected int _entityId = -1;
 
-        public SurveyAnswersController(ISurveyRepository SurveyRepository, IUserRepository users, ILogManager logger, IHttpContextAccessor accessor)
+        public SurveyAnswersController(ISurveyRepository SurveyRepository, IUserRepository users, ILogManager logger, IHttpContextAccessor accessor) : base(logger, accessor)
         {
             _SurveyRepository = SurveyRepository;
             _users = users;
-            _logger = logger;
-
-            if (accessor.HttpContext.Request.Query.ContainsKey("entityid"))
-            {
-                _entityId = int.Parse(accessor.HttpContext.Request.Query["entityid"]);
-            }
         }
 
         // POST api/<controller>/1
@@ -51,7 +44,7 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.ViewModule)]
         public void Post([FromBody] Models.Survey Survey)
         {
-            if (ModelState.IsValid && Survey.ModuleId == _entityId)
+            if (ModelState.IsValid && Survey.ModuleId == _authEntityId[EntityNames.Module])
             {
                 // Get User
                 if (this.User.Identity.IsAuthenticated)

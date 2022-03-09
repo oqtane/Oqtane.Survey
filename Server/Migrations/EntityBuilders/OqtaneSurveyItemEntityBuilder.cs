@@ -11,7 +11,7 @@ namespace Oqtane.Survey.Migrations.EntityBuilders
     {
         private const string _entityTableName = "OqtaneSurveyItem";
         private readonly PrimaryKey<OqtaneSurveyItemEntityBuilder> _primaryKey = new("PK_OqtaneSurveyItem", x => x.Id);
-        private readonly ForeignKey<OqtaneSurveyItemEntityBuilder> _oqtaneqtaneSurveyItemForeignKey = new("FK_OqtaneSurveyItem_OqtaneSurvey", x => x.Survey, "OqtaneSurvey", "SurveyId", ReferentialAction.SetNull);
+        private readonly ForeignKey<OqtaneSurveyItemEntityBuilder> _oqtaneqtaneSurveyItemForeignKey = new("FK_OqtaneSurveyItem_OqtaneSurvey", x => x.Survey, "OqtaneSurvey", "SurveyId", ReferentialAction.Cascade);
 
         public OqtaneSurveyItemEntityBuilder(MigrationBuilder migrationBuilder, IDatabase database) : base(migrationBuilder, database)
         {
@@ -24,12 +24,12 @@ namespace Oqtane.Survey.Migrations.EntityBuilders
         {
             Id = AddAutoIncrementColumn(table, "Id");
             Survey = AddIntegerColumn(table, "Survey");
-            ItemLabel = AddMaxStringColumn(table, "ItemLabel");
-            ItemType = AddMaxStringColumn(table, "ItemType");
-            ItemValue = AddMaxStringColumn(table, "ItemValue");
+            ItemLabel = AddStringColumn(table, "ItemLabel", 50);
+            ItemType = AddStringColumn(table, "ItemType", 50);
+            ItemValue = AddStringColumn(table, "ItemValue", 50, true);
             Position = AddIntegerColumn(table, "Position");
             Required = AddIntegerColumn(table, "Required");
-            SurveyChoiceId = AddIntegerColumn(table, "SurveyChoiceId");
+            SurveyChoiceId = AddIntegerColumn(table, "SurveyChoiceId", true);
             return this;
         }
 

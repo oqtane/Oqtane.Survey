@@ -25,7 +25,7 @@ namespace Oqtane.Survey.Migrations.EntityBuilders
             SurveyId = AddAutoIncrementColumn(table, "SurveyId");
             UserId = AddIntegerColumn(table, "UserId");
             ModuleId = AddIntegerColumn(table,"ModuleId");
-            SurveyName = AddMaxStringColumn(table, "SurveyName");
+            SurveyName = AddStringColumn(table, "SurveyName", 256, false);
             AddAuditableColumns(table);
             return this;
         }

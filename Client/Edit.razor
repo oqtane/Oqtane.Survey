@@ -110,7 +110,8 @@
 
     public override List<Resource> Resources => new List<Resource>()
     {
-        new Resource { ResourceType = ResourceType.Stylesheet, Url = ModulePath() + "Module.css" }
+        new Resource { ResourceType = ResourceType.Stylesheet, Url = "_content/Radzen.Blazor/css/default.css" },
+        new Resource { ResourceType = ResourceType.Script, Url = "_content/Radzen.Blazor/Radzen.Blazor.js" }
     };
     #endregion
 
