@@ -180,10 +180,8 @@
                         AddModuleMessage("Error Loading Survey", MessageType.Error);
                     }
                 }
-                else
-                {
-                    SelectedSurveyItem.ModuleId = ModuleState.ModuleId;
-                }
+
+                SelectedSurveyItem.ModuleId = ModuleState.ModuleId;
             }
         }
         catch (Exception ex)

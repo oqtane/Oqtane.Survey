@@ -6,16 +6,13 @@ using Oqtane.Shared;
 
 namespace Oqtane.Survey
 {
-    //public class HostResources : IHostResources
-    //{
-    //    public List<Resource> Resources => new List<Resource>()
-    //    {
-    //        new Resource {
-    //            ResourceType = ResourceType.Stylesheet,
-    //            Url = "_content/Radzen.Blazor/css/default.css" },
-    //        new Resource {
-    //            ResourceType = ResourceType.Script,
-    //            Url = "_content/Radzen.Blazor/Radzen.Blazor.js" }
-    //    };
-    //}
+    public class HostResources : IHostResources
+    {
+        public List<Resource> Resources => new List<Resource>()
+        {
+            new Resource {
+                ResourceType = ResourceType.Script,
+                Url = "_content/Radzen.Blazor/Radzen.Blazor.js" }
+        };
+    }
 }

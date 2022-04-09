@@ -11,6 +11,7 @@ using Oqtane.Repository;
 using Oqtane.Survey.Server.Repository;
 using System.Linq;
 using Oqtane.Controllers;
+using System;
 
 namespace Oqtane.Survey.Controllers
 {
@@ -168,9 +169,7 @@ namespace Oqtane.Survey.Controllers
         {
             var objSurveyItem = _SurveyRepository.GetSurveyItem(id);
 
-            Models.SurveyItem SurveyItem = ConvertToSurveyItem(objSurveyItem);
-
-            if (SurveyItem != null && SurveyItem.ModuleId == _authEntityId[EntityNames.Module])
+            if (objSurveyItem != null)
             {
                 bool boolResult = _SurveyRepository.DeleteSurveyItem(id);
                 if (boolResult)
