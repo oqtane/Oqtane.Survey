@@ -11,104 +11,108 @@
 @inject NavigationManager NavigationManager
 
 @strError
-<RadzenCard Style="margin-bottom: 20px;">
-    <div class="row">
-        <div class="col-md-12">
-            <div><b>Name</b></div>
-            <RadzenTextBox @bind-Value="SelectedSurveyItem.ItemLabel"
+@if (radzenInitialized)
+{
+    <RadzenCard Style="margin-bottom: 20px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div><b>Name</b></div>
+                <RadzenTextBox @bind-Value="SelectedSurveyItem.ItemLabel"
                            Style="width: 400px" />
-            <br />
+                <br />
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-md-6">
-            <div><b>Type</b></div>
-            <select @bind="SurveyTypeValue" class="form-control" style="width:250px;">
-                <option Value="1">Text Box</option>
-                <option Value="2">Text Area</option>
-                <option Value="3">Date</option>
-                <option Value="4">Date Time</option>
-                <option Value="5">Dropdown</option>
-                <option Value="6">Multi-Select Dropdown</option>
-            </select>
-        </div>
-        <div class="col-md-6">
-            <div><b>Required</b></div>
-            <RadzenCheckBox @bind-Value="boolRequired"
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div><b>Type</b></div>
+                <select @bind="SurveyTypeValue" class="form-control" style="width:250px;">
+                    <option Value="1">Text Box</option>
+                    <option Value="2">Text Area</option>
+                    <option Value="3">Date</option>
+                    <option Value="4">Date Time</option>
+                    <option Value="5">Dropdown</option>
+                    <option Value="6">Multi-Select Dropdown</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <div><b>Required</b></div>
+                <RadzenCheckBox @bind-Value="boolRequired"
                             Style="margin-bottom: 20px" TValue="bool" />
+            </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-md-12">
-            @if ((SurveyTypeValue == 5) || (SurveyTypeValue == 6))
-            {
-                <RadzenButton Click="OpenPopup"
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                @if ((SurveyTypeValue == 5) || (SurveyTypeValue == 6))
+                {
+                    <RadzenButton Click="OpenPopup"
                               Text="Edit Options"
                               Size="Radzen.ButtonSize.Small"
                               ButtonStyle="ButtonStyle.Info" />
-            }
+                }
+            </div>
         </div>
-    </div>
-</RadzenCard>
-<RadzenButton Click="UpdateSurveyItem"
+    </RadzenCard>
+    <RadzenButton Click="UpdateSurveyItem"
               Text="Save" ButtonStyle="ButtonStyle.Success"
               Style="margin-bottom: 10px; width: 150px" />
-<RadzenButton Click="Cancel"
+    <RadzenButton Click="Cancel"
               Text="Cancel" ButtonStyle="ButtonStyle.Light"
               Style="margin-bottom: 10px; width: 150px" />
-@if (SelectedSurveyItem != null)
-{
-    @if (SelectedSurveyItem.Id > 0)
+    @if (SelectedSurveyItem != null)
     {
-        <ActionDialog Header="Delete Item"
+        @if (SelectedSurveyItem.Id > 0)
+        {
+            <ActionDialog Header="Delete Item"
                       Message="@("Are You Sure You Wish To Delete The Survey Item?")"
                       Action="Delete" Security="SecurityAccessLevel.Edit"
                       Class="btn btn-danger"
                       OnClick="@(async () => await DeleteSurveyItem())" />
-    }
+        }
 
-    @if (ShowPopup)
-    {
-        <div class="modal" tabindex="-1" style="display:block;background-color:gainsboro" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Edit Options</h3>
-                    </div>
-                    <div class="modal-body">
-                        <ul style="list-style-type:none;">
-                            @foreach (var option in SelectedSurveyItem.SurveyItemOption.OrderBy(x => x.Id))
-                            {
-                                <li>
-                                    <div Style="margin-bottom: 10px; width: 150px">
-                                        <RadzenButton Click="(() => RemoveOption(option))"
+        @if (ShowPopup)
+        {
+            <div class="modal" tabindex="-1" style="display:block;background-color:gainsboro" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Edit Options</h3>
+                        </div>
+                        <div class="modal-body">
+                            <ul style="list-style-type:none;">
+                                @foreach (var option in SelectedSurveyItem.SurveyItemOption.OrderBy(x => x.Id))
+                                {
+                                    <li>
+                                        <div Style="margin-bottom: 10px; width: 150px">
+                                            <RadzenButton Click="(() => RemoveOption(option))"
                                                       Icon="delete"
                                                       Size="Radzen.ButtonSize.Small"
                                                       ButtonStyle="ButtonStyle.Danger" />
-                                        <b>@option.OptionLabel</b>
-                                    </div>
-                                </li>
-                            }
-                        </ul>
-                        <RadzenTextBox @bind-Value="newOption"
+                                            <b>@option.OptionLabel</b>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                            <RadzenTextBox @bind-Value="newOption"
                                        Style="width: 200px" />
-                        <RadzenButton Click="AddOption"
+                            <RadzenButton Click="AddOption"
                                       Text="Add"
                                       Size="Radzen.ButtonSize.Small"
                                       ButtonStyle="ButtonStyle.Success" />
-                        <RadzenButton Click="ClosePopup"
+                            <RadzenButton Click="ClosePopup"
                                       Text="Close"
                                       Size="Radzen.ButtonSize.Small"
                                       ButtonStyle="ButtonStyle.Secondary" />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     }
 }
 @code {
+    bool radzenInitialized = false;
     #region Control Definition
     // This control can only be reached by users with Edit permission
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Edit;
@@ -135,6 +139,17 @@
 
     private string newOption;
     int SurveyTypeValue = 1;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender); // allows Oqtane to register the JavaScript library declared in Resources
+
+        if (firstRender && !radzenInitialized)
+        {
+            radzenInitialized = true;
+            StateHasChanged();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {

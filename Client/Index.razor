@@ -25,6 +25,8 @@ else
     <br />
 }
 
+@if (radzenInitialized)
+{
 @if (SelectedSurvey != null)
 {
     <div class="row">
@@ -147,8 +149,9 @@ else
         </Tabs>
     </RadzenTabs>
 }
-
+}
 @code {
+    bool radzenInitialized = false;
     #region Control Definition
     public override SecurityAccessLevel SecurityAccessLevel => SecurityAccessLevel.Anonymous;
 
@@ -159,10 +162,20 @@ else
     };
     #endregion
 
-
     bool isAuthenticated = false;
     bool ShowSurveyComplete = false;
     Survey SelectedSurvey;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender); // allows Oqtane to register the JavaScript library declared in Resources
+
+        if (firstRender && !radzenInitialized)
+        {
+            radzenInitialized = true;
+            StateHasChanged();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
