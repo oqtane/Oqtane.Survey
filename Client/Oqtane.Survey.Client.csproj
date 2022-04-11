@@ -20,7 +20,7 @@
 	<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.0" />
 	<PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
     <PackageReference Include="Radzen.Blazor" Version="3.0.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.12" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
   </ItemGroup>
 
