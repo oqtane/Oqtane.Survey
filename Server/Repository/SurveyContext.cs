@@ -2,19 +2,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Oqtane.Modules;
 using Oqtane.Repository;
+using Oqtane.Infrastructure;
+using Oqtane.Repository.Databases.Interfaces;
 using Oqtane.Survey.Models;
 using Oqtane.Survey.Server.Repository;
 
 namespace Oqtane.Survey.Repository
 {
-    public partial class SurveyContext : DBContextBase, IService
+    public partial class SurveyContext : DBContextBase, IService, IMultiDatabase
     {
         public virtual DbSet<OqtaneSurvey> OqtaneSurvey { get; set; }
         public virtual DbSet<OqtaneSurveyAnswer> OqtaneSurveyAnswer { get; set; }
         public virtual DbSet<OqtaneSurveyItem> OqtaneSurveyItem { get; set; }
         public virtual DbSet<OqtaneSurveyItemOption> OqtaneSurveyItemOption { get; set; }
 
-        public SurveyContext(ITenantResolver tenantResolver, IHttpContextAccessor accessor) : base(tenantResolver, accessor)
+        public SurveyContext(ITenantManager tenantManager, IHttpContextAccessor accessor) : base(tenantManager, accessor)
         {
             // ContextBase handles multi-tenant database connections
         }

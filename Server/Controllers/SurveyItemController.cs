@@ -10,27 +10,21 @@ using Oqtane.Survey.Repository;
 using Oqtane.Repository;
 using Oqtane.Survey.Server.Repository;
 using System.Linq;
+using Oqtane.Controllers;
+using System;
 
 namespace Oqtane.Survey.Controllers
 {
-    [Route(ControllerRoutes.Default)]
-    public class SurveyItemController : Controller
+    [Route(ControllerRoutes.ApiRoute)]
+    public class SurveyItemController : ModuleControllerBase
     {
         private readonly ISurveyRepository _SurveyRepository;
         private readonly IUserRepository _users;
-        private readonly ILogManager _logger;
-        protected int _entityId = -1;
 
-        public SurveyItemController(ISurveyRepository SurveyRepository, IUserRepository users, ILogManager logger, IHttpContextAccessor accessor)
+        public SurveyItemController(ISurveyRepository SurveyRepository, IUserRepository users, ILogManager logger, IHttpContextAccessor accessor) : base(logger, accessor)
         {
             _SurveyRepository = SurveyRepository;
             _users = users;
-            _logger = logger;
-
-            if (accessor.HttpContext.Request.Query.ContainsKey("entityid"))
-            {
-                _entityId = int.Parse(accessor.HttpContext.Request.Query["entityid"]);
-            }
         }
 
         // GET: api/<controller>?moduleid=x
@@ -59,7 +53,7 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public Models.SurveyItem Post([FromBody] Models.SurveyItem SurveyItem)
         {
-            if (ModelState.IsValid && SurveyItem.ModuleId == _entityId)
+            if (ModelState.IsValid && SurveyItem.ModuleId == _authEntityId[EntityNames.Module])
             {
                 SurveyItem = ConvertToSurveyItem(_SurveyRepository.CreateSurveyItem(SurveyItem));
                 _logger.Log(LogLevel.Information, this, LogFunction.Create, "SurveyItem Added {SurveyItem}", SurveyItem);
@@ -72,7 +66,7 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public Models.SurveyItem Post(string MoveType, [FromBody] Models.SurveyItem SurveyItem)
         {
-            if (ModelState.IsValid && SurveyItem.Id == _entityId)
+            if (ModelState.IsValid && SurveyItem.ModuleId == _authEntityId[EntityNames.Module])
             {
                 // Get the Survey (and all SurveyItems)
                 var objSurvey = _SurveyRepository.GetSurvey(SurveyItem.ModuleId);
@@ -160,7 +154,7 @@ namespace Oqtane.Survey.Controllers
         [Authorize(Policy = PolicyNames.EditModule)]
         public Models.SurveyItem Put(int id, [FromBody] Models.SurveyItem SurveyItem)
         {
-            if (ModelState.IsValid && SurveyItem.Id == _entityId)
+            if (ModelState.IsValid && SurveyItem.ModuleId == _authEntityId[EntityNames.Module])
             {
                 SurveyItem = ConvertToSurveyItem(_SurveyRepository.UpdateSurveyItem(SurveyItem));
                 _logger.Log(LogLevel.Information, this, LogFunction.Update, "SurveyItem Updated {SurveyItem}", SurveyItem);
@@ -175,9 +169,7 @@ namespace Oqtane.Survey.Controllers
         {
             var objSurveyItem = _SurveyRepository.GetSurveyItem(id);
 
-            Models.SurveyItem SurveyItem = ConvertToSurveyItem(objSurveyItem);
-
-            if (SurveyItem != null && SurveyItem.Id == _entityId)
+            if (objSurveyItem != null)
             {
                 bool boolResult = _SurveyRepository.DeleteSurveyItem(id);
                 if (boolResult)
