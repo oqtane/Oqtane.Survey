@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <Version>1.0.2</Version>
     <Authors>Oqtane</Authors>
@@ -13,13 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.8" />
-	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.8" PrivateAssets="all" />
-	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.8" />
-	<PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.8" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.9" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.9" PrivateAssets="all" />
+	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.9" />
+	<PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.9" />
     <PackageReference Include="Radzen.Blazor" Version="3.0.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.0" />
-    <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,10 +28,10 @@
 
   <ItemGroup>
     <Reference Include="Oqtane.Client">
-      <HintPath>..\..\oqtane.framework\Oqtane.Server\bin\Debug\net8.0\Oqtane.Client.dll</HintPath>
+      <HintPath>..\..\oqtane.framework\Oqtane.Server\bin\Debug\net9.0\Oqtane.Client.dll</HintPath>
     </Reference>
     <Reference Include="Oqtane.Shared">
-      <HintPath>..\..\oqtane.framework\Oqtane.Server\bin\Debug\net8.0\Oqtane.Shared.dll</HintPath>
+      <HintPath>..\..\oqtane.framework\Oqtane.Server\bin\Debug\net9.0\Oqtane.Shared.dll</HintPath>
     </Reference>
   </ItemGroup>
 

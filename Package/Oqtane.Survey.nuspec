@@ -16,18 +16,18 @@
     <releaseNotes></releaseNotes>
     <summary></summary>
     <dependencies>
-      <dependency id="Oqtane.Framework" version="3.0.2" />
+      <dependency id="Oqtane.Framework" version="6.2.1" />
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Client\bin\Release\net8.0\Oqtane.Survey.Client.Oqtane.dll" target="lib\net8.0" /> 
-    <file src="..\Client\bin\Release\net8.0\Oqtane.Survey.Client.Oqtane.pdb" target="lib\net8.0" /> 
-    <file src="..\Server\bin\Release\net8.0\Oqtane.Survey.Server.Oqtane.dll" target="lib\net8.0" /> 
-    <file src="..\Server\bin\Release\net8.0\Oqtane.Survey.Server.Oqtane.pdb" target="lib\net8.0" /> 
-    <file src="..\Shared\bin\Release\net8.0\Oqtane.Survey.Shared.Oqtane.dll" target="lib\net8.0" /> 
-    <file src="..\Shared\bin\Release\net8.0\Oqtane.Survey.Shared.Oqtane.pdb" target="lib\net8.0" />
-    <file src="..\Server\bin\Release\net8.0\System.Linq.Dynamic.Core.dll" target="lib\net8.0" />
-    <file src="..\Server\bin\Release\net8.0\Radzen.Blazor.dll" target="lib\net8.0" />
+    <file src="..\Client\bin\Release\net9.0\Oqtane.Survey.Client.Oqtane.dll" target="lib\net9.0" /> 
+    <file src="..\Client\bin\Release\net9.0\Oqtane.Survey.Client.Oqtane.pdb" target="lib\net9.0" /> 
+    <file src="..\Server\bin\Release\net9.0\Oqtane.Survey.Server.Oqtane.dll" target="lib\net9.0" /> 
+    <file src="..\Server\bin\Release\net9.0\Oqtane.Survey.Server.Oqtane.pdb" target="lib\net9.0" /> 
+    <file src="..\Shared\bin\Release\net9.0\Oqtane.Survey.Shared.Oqtane.dll" target="lib\net9.0" /> 
+    <file src="..\Shared\bin\Release\net9.0\Oqtane.Survey.Shared.Oqtane.pdb" target="lib\net9.0" />
+    <file src="..\Server\bin\Release\net9.0\System.Linq.Dynamic.Core.dll" target="lib\net9.0" />
+    <file src="..\Server\bin\Release\net9.0\Radzen.Blazor.dll" target="lib\net9.0" />
     <file src="..\Server\wwwroot\**\*.*" target="wwwroot" /> 
   </files>
 </package>
